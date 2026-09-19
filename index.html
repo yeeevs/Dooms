@@ -17,7 +17,7 @@
     --font-mono:'Space Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   }
   :root, :root[data-theme="bright"]{
-    --bg:#EAE3D1; --bg-grad:#F1EBDC; --panel:#F5F1E4; --panel2:#E4DCC6;
+    --bg:#FFFFFF; --bg-grad:#FFFFFF; --panel:#F5F1E4; --panel2:#E4DCC6;
     --border:#C9BE9E; --border-strong:#8D8264;
     --text:#211C13; --muted:#6E624A;
     --accent:#1E3FA0; --accent-ink:#F5F1E4; --accent2:#8A2BB0;
@@ -90,6 +90,7 @@
 
   header{position:relative; padding:6px 0 4px; margin-bottom:6px; text-align:center;}
   .ring-deco{position:absolute; top:-14px; left:50%; transform:translateX(-50%); width:230px; height:230px; opacity:.14; pointer-events:none; color:var(--accent2); z-index:0;}
+  :root[data-theme="bright"] .ring-deco{color:var(--text); opacity:.16;}
   .clock-hand{transform-origin:50px 50px; animation:tick 60s steps(60,end) infinite;}
   @keyframes tick{from{transform:rotate(0deg);} to{transform:rotate(360deg);}}
   @media (prefers-reduced-motion:reduce){ .clock-hand{animation:none;} }
@@ -905,9 +906,9 @@ async function runBoot(){
 runBoot();
 
 /* ---------- One-shot round engine (shared by Daily / Training / How 2) ---------- */
-let roundGen = 0;
 function runOneShotRound(puzzle, ui, onResult){
-  const myGen = ++roundGen;
+  ui._gen = (ui._gen || 0) + 1;
+  const myGen = ui._gen;
   let startTime = performance.now();
   let resolved = false;
 
@@ -926,7 +927,7 @@ function runOneShotRound(puzzle, ui, onResult){
   });
 
   const tick = setInterval(() => {
-    if (myGen !== roundGen){ clearInterval(tick); return; }
+    if (myGen !== ui._gen){ clearInterval(tick); return; }
     if (resolved) return;
     ui.timerEl.textContent = fmtTime(performance.now() - startTime);
   }, 100);
@@ -938,7 +939,7 @@ function runOneShotRound(puzzle, ui, onResult){
   }
 
   function guess(idx, btn){
-    if (myGen !== roundGen || resolved) return;
+    if (myGen !== ui._gen || resolved) return;
     finish();
     const timeMs = performance.now() - startTime;
     ui.timerEl.textContent = fmtTime(timeMs);
@@ -957,7 +958,7 @@ function runOneShotRound(puzzle, ui, onResult){
   }
 
   ui.giveUpBtn.onclick = () => {
-    if (myGen !== roundGen || resolved) return;
+    if (myGen !== ui._gen || resolved) return;
     finish();
     const timeMs = performance.now() - startTime;
     ui.timerEl.textContent = fmtTime(timeMs);
