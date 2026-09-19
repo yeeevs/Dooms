@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Doomsday</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%23F5F1E4'/%3E%3Crect x='6' y='6' width='88' height='88' rx='11' fill='none' stroke='%231E3FA0' stroke-width='5'/%3E%3Ccircle cx='50' cy='50' r='27' fill='none' stroke='%231E3FA0' stroke-width='4'/%3E%3Cg stroke='%231E3FA0' stroke-width='4' stroke-linecap='round'%3E%3Cline x1='50' y1='16' x2='50' y2='22'/%3E%3Cline x1='50' y1='78' x2='50' y2='84'/%3E%3Cline x1='16' y1='50' x2='22' y2='50'/%3E%3Cline x1='78' y1='50' x2='84' y2='50'/%3E%3C/g%3E%3Cline x1='50' y1='50' x2='50' y2='28' stroke='%231E3FA0' stroke-width='6' stroke-linecap='round'/%3E%3Ccircle cx='50' cy='50' r='4.5' fill='%231E3FA0'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -14,7 +16,6 @@
     --font-body:'Space Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     --font-mono:'Space Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   }
-  /* ---- Bright: "Day edition" -- kraft paper + riso cobalt & fluorescent red ---- */
   :root, :root[data-theme="bright"]{
     --bg:#EAE3D1; --bg-grad:#F1EBDC; --panel:#F5F1E4; --panel2:#E4DCC6;
     --border:#C9BE9E; --border-strong:#8D8264;
@@ -22,7 +23,6 @@
     --accent:#1E3FA0; --accent-ink:#F5F1E4; --accent2:#8A2BB0;
     --good:#2C6E49; --danger:#D93A1F; --gold:#B4790E; --silver:#7C7461; --bronze:#9A5A28;
   }
-  /* ---- Twilight: "Dusk edition" -- aubergine stock + fluorescent pink/violet ---- */
   :root[data-theme="twilight"]{
     --bg:#241C31; --bg-grad:#2C2140; --panel:#2A2038; --panel2:#352842;
     --border:#4E3D63; --border-strong:#725A8C;
@@ -30,7 +30,6 @@
     --accent:#E8497E; --accent-ink:#241C31; --accent2:#7B5CF5;
     --good:#5FCB8E; --danger:#FF6B54; --gold:#F2B84B; --silver:#C7BAD9; --bronze:#DE9868;
   }
-  /* ---- Dark: "Night edition" -- observatory instrument panel, phosphor ink ---- */
   :root[data-theme="dark"]{
     --bg:#0C1210; --bg-grad:#0F1613; --panel:#101815; --panel2:#16201B;
     --border:#25352C; --border-strong:#3C5346;
@@ -43,19 +42,15 @@
   html{-webkit-tap-highlight-color:transparent;}
   body{
     margin:0; color:var(--text); font-family:var(--font-body);
-    background:
-      radial-gradient(ellipse 900px 500px at 50% -10%, var(--bg-grad), transparent),
-      var(--bg);
+    background:radial-gradient(ellipse 900px 500px at 50% -10%, var(--bg-grad), transparent), var(--bg);
     min-height:100vh; display:flex; justify-content:center; padding:18px 14px 40px;
     transition:background .35s ease, color .35s ease;
   }
   .wrap{width:100%; max-width:460px; position:relative;}
   :focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
 
-  /* Full-page grain -- the one texture pass that carries "rough" everywhere */
   .grain{
-    position:fixed; inset:0; z-index:999; pointer-events:none; opacity:.05;
-    mix-blend-mode:overlay;
+    position:fixed; inset:0; z-index:999; pointer-events:none; opacity:.05; mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size:180px 180px;
   }
@@ -69,25 +64,32 @@
   .menu-backdrop{position:fixed; inset:0; background:rgba(10,8,4,.55); backdrop-filter:blur(2px); z-index:900; opacity:0; pointer-events:none; transition:opacity .25s ease;}
   .menu-backdrop.open{opacity:1; pointer-events:auto;}
   .menu-drawer{
-    position:fixed; top:0; left:0; bottom:0; width:80%; max-width:300px; overflow-y:auto;
+    position:fixed; top:0; left:0; bottom:0; width:82%; max-width:310px; overflow-y:auto;
     background:var(--panel); border-right:1.6px solid var(--text); box-shadow:6px 0 0 0 var(--border-strong);
     z-index:901; padding:26px 20px; transform:translateX(-106%);
     transition:transform .32s cubic-bezier(.22,.85,.25,1);
   }
   .menu-drawer.open{transform:translateX(0);}
-  .drawer-eyebrow{font-family:var(--font-mono); font-size:.68rem; color:var(--accent2); text-transform:uppercase; letter-spacing:.08em; margin:0 0 4px;}
+  .drawer-eyebrow{font-family:var(--font-mono); font-size:.68rem; color:var(--accent2); text-transform:uppercase; letter-spacing:.08em; margin:18px 0 4px;}
+  .drawer-eyebrow:first-child{margin-top:0;}
   .menu-drawer h2{font-family:var(--font-display); font-weight:800; font-size:1.5rem; text-transform:uppercase; margin:0 0 18px; padding-bottom:12px; border-bottom:2px solid var(--text);}
-  .drawer-list{display:flex; flex-direction:column; margin-bottom:22px;}
-  .drawer-footer{font-family:var(--font-mono); font-size:.68rem; color:var(--muted); text-align:center; margin-top:6px;}
+  .drawer-list{display:flex; flex-direction:column;}
+  .drawer-footer{font-family:var(--font-mono); font-size:.68rem; color:var(--muted); text-align:center; margin-top:14px;}
 
-  .themebar{display:flex; gap:0; background:var(--panel); border:1.5px solid var(--text); box-shadow:3px 3px 0 0 var(--border-strong); width:fit-content;}
+  .themebar{display:flex; gap:0; background:var(--panel2); border:1.5px solid var(--text); box-shadow:2px 2px 0 0 var(--border-strong); width:fit-content; margin-bottom:14px;}
   .themebtn{width:28px; height:28px; border:none; border-right:1.5px solid var(--text); background:none; color:var(--muted); display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;}
   .themebtn:last-child{border-right:none;}
   .themebtn svg{width:14px; height:14px;}
   .themebtn.active{color:var(--accent-ink); background:var(--accent);}
 
+  .togglerow{display:flex; justify-content:space-between; align-items:center; padding:9px 0; font-size:.82rem;}
+  .switch{width:38px; height:21px; border:1.6px solid var(--text); border-radius:12px; position:relative; cursor:pointer; background:var(--panel2); flex-shrink:0;}
+  .switch.on{background:var(--accent);}
+  .switch::after{content:''; position:absolute; top:1.5px; left:1.5px; width:15px; height:15px; border-radius:50%; background:var(--panel); transition:left .15s ease;}
+  .switch.on::after{left:19px; background:var(--accent-ink);}
+
   header{position:relative; padding:6px 0 4px; margin-bottom:6px; text-align:center;}
-  .ring-deco{position:absolute; top:-14px; left:50%; transform:translateX(-50%); width:230px; height:230px; opacity:.18; pointer-events:none; color:var(--accent2); z-index:0;}
+  .ring-deco{position:absolute; top:-14px; left:50%; transform:translateX(-50%); width:230px; height:230px; opacity:.14; pointer-events:none; color:var(--accent2); z-index:0;}
   .clock-hand{transform-origin:50px 50px; animation:tick 60s steps(60,end) infinite;}
   @keyframes tick{from{transform:rotate(0deg);} to{transform:rotate(360deg);}}
   @media (prefers-reduced-motion:reduce){ .clock-hand{animation:none;} }
@@ -104,9 +106,8 @@
   .byline::before, .byline::after{content:'\2014'; margin:0 6px; opacity:.6;}
   .tagline{text-align:center; color:var(--muted); font-size:.83rem; margin:0 0 22px; line-height:1.55; position:relative; z-index:1;}
 
-  .tabs{display:flex; border-bottom:2px solid var(--text); margin-bottom:18px; gap:0;}
-  .tab{display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:none; border:none; border-bottom:1px dashed var(--border-strong); padding:15px 2px; font-family:var(--font-display); font-weight:800; font-size:1.15rem; text-transform:uppercase; color:var(--muted); cursor:pointer; position:relative;}
-  .tab .idx{font-family:var(--font-mono); font-size:.72rem; font-weight:400; color:var(--border-strong); width:20px; flex-shrink:0;}
+  .tab{display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:none; border:none; border-bottom:1px dashed var(--border-strong); padding:15px 2px; font-family:var(--font-display); font-weight:800; font-size:1.1rem; text-transform:uppercase; color:var(--muted); cursor:pointer; position:relative;}
+  .tab .idx{font-family:var(--font-mono); font-size:.7rem; font-weight:400; color:var(--border-strong); width:20px; flex-shrink:0;}
   .tab.active{color:var(--text);}
   .tab.active .idx{color:var(--accent);}
   .tab.active::after{content:'\2713'; margin-left:auto; color:var(--accent); font-family:var(--font-body);}
@@ -115,7 +116,6 @@
   .masthead{display:flex; justify-content:space-between; align-items:baseline; font-family:var(--font-mono); font-size:.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; border-top:1.5px dashed var(--border-strong); border-bottom:1.5px dashed var(--border-strong); padding:9px 2px; margin:2px 0 22px;}
   .masthead b{color:var(--text); font-family:var(--font-display); font-size:1rem; letter-spacing:.02em; font-weight:800;}
 
-  /* ---- Boot sequence ---- */
   .boot-overlay{position:fixed; inset:0; z-index:2000; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; cursor:pointer; transition:opacity .4s ease, transform .4s ease;}
   .boot-overlay.leaving{opacity:0; transform:scale(1.05);}
   .boot-overlay.gone{display:none;}
@@ -139,7 +139,6 @@
   .puzzledate{font-family:var(--font-display); font-weight:800; font-size:2.1rem; text-align:center; margin:2px 0 4px; letter-spacing:.01em; text-transform:uppercase; line-height:1;}
   .timerrow{display:flex; justify-content:center; align-items:baseline; gap:6px; margin:4px 0 16px; position:relative;}
   .timer{font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:1.2rem; font-weight:700; color:var(--accent);}
-  .penalty{font-size:.72rem; color:var(--danger); min-height:16px; text-align:center; font-family:var(--font-mono);}
 
   .daybtns{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px;}
   .daybtns button{
@@ -154,12 +153,12 @@
   .daybtns button:nth-child(even){transform:rotate(0.6deg);}
   .daybtns button:hover:not(:disabled){border-color:var(--accent);}
   .daybtns button:active:not(:disabled){transform:translate(2px,2px); box-shadow:0 0 0 0 var(--border-strong);}
-  .daybtns button.eliminated{background:var(--panel); color:var(--danger); border-color:var(--danger); opacity:.55; text-decoration:line-through; box-shadow:none; transform:translate(1px,1px) rotate(0deg);}
-  .daybtns button.correct{background:var(--good); color:var(--panel); border-color:var(--good); animation:stamp .32s ease; box-shadow:2px 2px 0 0 var(--border-strong);}
-  .daybtns button.answer{background:var(--gold); color:#241a00; border-color:var(--gold); animation:stamp .32s ease; box-shadow:2px 2px 0 0 var(--border-strong);}
+  .daybtns button:disabled{cursor:default; opacity:.45;}
+  .daybtns button.correct{background:var(--good); color:var(--panel); border-color:var(--good); animation:stamp .32s ease; box-shadow:2px 2px 0 0 var(--border-strong); opacity:1;}
+  .daybtns button.wrong{background:var(--danger); color:var(--panel); border-color:var(--danger); animation:stamp .32s ease; box-shadow:2px 2px 0 0 var(--border-strong); opacity:1;}
+  .daybtns button.answer{background:var(--gold); color:#241a00; border-color:var(--gold); animation:stamp .32s ease .1s backwards; box-shadow:2px 2px 0 0 var(--border-strong); opacity:1;}
   @keyframes stamp{0%{transform:scale(1.5) rotate(-8deg); opacity:0;} 60%{transform:scale(0.94) rotate(2deg); opacity:1;} 100%{transform:scale(1) rotate(0deg);}}
-  @media (prefers-reduced-motion:reduce){ .daybtns button.correct, .daybtns button.answer, .rankpill{animation:none !important;} .daybtns button{transform:none !important;} }
-  .daybtns button:disabled{cursor:default;}
+  @media (prefers-reduced-motion:reduce){ .daybtns button.correct, .daybtns button.wrong, .daybtns button.answer, .rankpill{animation:none !important;} .daybtns button{transform:none !important;} }
 
   .feedback{min-height:20px; text-align:center; font-size:.8rem; color:var(--muted); font-family:var(--font-mono);}
   .feedback .cursor{display:inline-block; width:6px; margin-left:1px; animation:blink 1s step-end infinite; color:var(--accent2);}
@@ -168,15 +167,24 @@
 
   .giveup{display:block; margin:8px auto 0; background:none; border:none; color:var(--muted); font-family:var(--font-mono); font-size:.74rem; text-decoration:underline; text-decoration-style:dashed; text-underline-offset:3px; cursor:pointer; padding:6px;}
   .giveup:hover{color:var(--danger);}
+  .giveup:disabled{opacity:0; pointer-events:none;}
 
   .result{text-align:center; padding:4px 0 2px;}
   .result .big{font-family:var(--font-display); font-size:2.6rem; font-weight:800; color:var(--accent); line-height:1;}
   .result .lbl{font-size:.74rem; color:var(--muted); margin-top:4px; text-transform:uppercase; letter-spacing:.06em;}
   .result .rankline{margin-top:14px; font-size:.85rem; color:var(--text); line-height:1.55;}
+  .result.missed .big{color:var(--danger);}
 
   .streakchip{display:inline-flex; align-items:center; gap:6px; font-size:.75rem; color:var(--muted); font-family:var(--font-mono); border:1.5px solid var(--text); border-radius:2px; padding:5px 12px; margin:0 auto 16px; width:fit-content; background:var(--panel); box-shadow:2px 2px 0 0 var(--border-strong);}
   .streakchip b{color:var(--accent2); font-family:var(--font-display); font-size:1rem; font-weight:800;}
   .streakchip.lit{border-color:var(--accent2);}
+
+  .dailytop{display:flex; gap:10px; margin-bottom:16px;}
+  .dailytop .card{flex:1; margin-bottom:0; padding:12px 10px; text-align:center;}
+  .dailytop .n{font-family:var(--font-display); font-weight:800; font-size:1.3rem; line-height:1;}
+  .dailytop .l{font-size:.62rem; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-top:3px;}
+  .traincta{display:block; width:100%; text-align:center; padding:13px; margin-top:2px; border:1.6px dashed var(--border-strong); border-radius:var(--radius); background:none; color:var(--muted); font-family:var(--font-mono); font-size:.78rem; cursor:pointer; text-transform:uppercase; letter-spacing:.04em;}
+  .traincta:hover{border-color:var(--accent); color:var(--accent);}
 
   .codec{background:var(--panel); border:1.5px solid var(--text); border-radius:2px; margin-bottom:14px; overflow:hidden; transform-origin:top center; animation:codecIn .3s ease-out; box-shadow:4px 4px 0 0 var(--border-strong);}
   @media (prefers-reduced-motion:reduce){ .codec{animation:none;} }
@@ -186,42 +194,47 @@
   .codec-dot.pulse{animation:dotpulse 1s ease-in-out infinite;}
   @keyframes dotpulse{0%,100%{opacity:1;} 50%{opacity:.35;}}
   @media (prefers-reduced-motion:reduce){ .codec-dot.pulse{animation:none;} }
-  .codec-body{padding:14px 16px 16px; font-family:var(--font-mono); font-size:.81rem; line-height:1.75; color:var(--text); background-image:repeating-linear-gradient(var(--panel) 0 26px, var(--border) 26px 27px); background-size:100% 27px;}
+  .codec-body{padding:14px 16px 16px; font-family:var(--font-mono); font-size:.83rem; line-height:1.8; color:var(--text); background-image:repeating-linear-gradient(var(--panel) 0 27px, var(--border) 27px 28px); background-size:100% 28px;}
   .codec-line{white-space:pre-wrap;}
   .codec-line b{color:var(--accent);}
+  .codec-line.headline{font-family:var(--font-display); font-weight:800; font-size:1.05rem; text-transform:none; margin-bottom:4px;}
 
-  .rankpill-wrap{text-align:center; margin:0 0 14px;}
+  .mathtoggle{font-size:.74rem; color:var(--accent2); cursor:pointer; text-decoration:underline; text-decoration-style:dotted; text-underline-offset:3px; margin-top:2px; display:inline-block;}
+  .mathbox{display:none; margin-top:10px; padding-top:10px; border-top:1px dashed var(--border-strong); font-size:.78rem; line-height:1.7;}
+  .mathbox.show{display:block;}
+  .mathbox code{background:var(--panel2); padding:1px 5px; border-radius:3px;}
+
+  .rankpill-wrap{text-align:center; margin:0 0 14px; position:relative;}
   .rankpill{display:inline-flex; align-items:center; gap:6px; font-family:var(--font-display); font-weight:800; font-size:1rem; letter-spacing:.02em; text-transform:uppercase; padding:5px 16px 3px; border-radius:2px; border:1.6px solid var(--text); animation:stamp .3s ease; transform:rotate(-2deg); box-shadow:2px 2px 0 0 var(--border-strong); position:relative; overflow:hidden;}
-
-  /* ---- Shine: a one-time foil sweep on payoff moments, a slow ambient one on the brand ---- */
-  @keyframes shineSweep{
-    0%{transform:translateX(-160%) skewX(-20deg); opacity:0;}
-    10%{opacity:1;}
-    45%{opacity:1;}
-    62%{transform:translateX(220%) skewX(-20deg); opacity:0;}
-    100%{transform:translateX(220%) skewX(-20deg); opacity:0;}
-  }
-  .shine{position:relative; overflow:hidden;}
-  .shine::after{
-    content:''; position:absolute; top:-15%; left:0; width:38%; height:130%;
-    background:linear-gradient(115deg, transparent 0%, rgba(255,255,255,.75) 45%, rgba(255,255,255,.2) 58%, transparent 100%);
-    pointer-events:none; mix-blend-mode:overlay;
-  }
-  .wordmark span.shine::after{animation:shineSweep 6.5s ease-in-out infinite; animation-delay:var(--shine-delay,0s);}
-  .rankpill.shine::after, .daybtns button.correct.shine::after, .daybtns button.answer.shine::after{
-    animation:shineSweep 1.05s ease-out 1; animation-delay:.16s; animation-fill-mode:backwards;
-  }
-  @media (prefers-reduced-motion:reduce){ .shine::after{animation:none !important; content:none;} }
   .rankpill.grade-s{color:var(--gold); border-color:var(--gold);}
   .rankpill.grade-a{color:var(--accent2); border-color:var(--accent2);}
   .rankpill.grade-b{color:var(--accent); border-color:var(--accent);}
   .rankpill.grade-c{color:var(--muted); border-color:var(--border-strong);}
   .rankpill.grade-d{color:var(--danger); border-color:var(--danger);}
+  .distline{font-family:var(--font-mono); font-size:.72rem; color:var(--muted); margin-top:6px;}
+
+  @keyframes shineSweep{
+    0%{transform:translateX(-160%) skewX(-20deg); opacity:0;}
+    10%{opacity:1;} 45%{opacity:1;}
+    62%{transform:translateX(220%) skewX(-20deg); opacity:0;}
+    100%{transform:translateX(220%) skewX(-20deg); opacity:0;}
+  }
+  .shine{position:relative; overflow:hidden;}
+  .shine::after{content:''; position:absolute; top:-15%; left:0; width:38%; height:130%; background:linear-gradient(115deg, transparent 0%, rgba(255,255,255,.75) 45%, rgba(255,255,255,.2) 58%, transparent 100%); pointer-events:none; mix-blend-mode:overlay;}
+  .wordmark span.shine::after{animation:shineSweep 6.5s ease-in-out infinite; animation-delay:var(--shine-delay,0s);}
+  .rankpill.shine::after, .daybtns button.correct.shine::after, .daybtns button.answer.shine::after{animation:shineSweep 1.05s ease-out 1; animation-delay:.16s; animation-fill-mode:backwards;}
+  @media (prefers-reduced-motion:reduce){ .shine::after{animation:none !important; content:none;} }
+
+  /* S-rank: go big */
+  .srank-burst{position:absolute; inset:-30px; pointer-events:none; z-index:2;}
+  .srank-burst span{position:absolute; top:50%; left:50%; width:3px; height:22px; background:var(--gold); border-radius:2px; transform-origin:50% 90px; animation:sburst .9s ease-out forwards;}
+  @keyframes sburst{0%{transform:translate(-50%,-50%) rotate(var(--ang)) translateY(0); opacity:1;} 100%{transform:translate(-50%,-50%) rotate(var(--ang)) translateY(-64px); opacity:0;}}
+  @media (prefers-reduced-motion:reduce){ .srank-burst{display:none;} }
+  .rankpill-wrap.srank-glow .rankpill{box-shadow:0 0 0 3px var(--gold), 4px 4px 0 0 var(--border-strong); transform:rotate(-2deg) scale(1.08);}
 
   .notice{font-size:.78rem; color:var(--muted); text-align:center; padding:12px; background:var(--panel2); border:1.5px dashed var(--border-strong); border-radius:var(--radius); margin-bottom:14px; line-height:1.5;}
 
-
-  .stats{display:flex; gap:8px; margin-bottom:16px;}
+  .stats{display:flex; gap:9px; margin-bottom:16px;}
   .stat{flex:1; background:var(--panel); border:1.5px solid var(--text); border-radius:var(--radius); padding:11px 8px; text-align:center; transition:border-color .2s ease; box-shadow:2px 2px 0 0 var(--border-strong);}
   .stat .n{font-family:var(--font-display); font-size:1.5rem; font-weight:800; transition:color .2s ease; line-height:1;}
   .stat .l{font-size:.63rem; color:var(--muted); margin-top:3px; text-transform:uppercase; letter-spacing:.05em;}
@@ -234,27 +247,51 @@
   button.action:active:not(:disabled){transform:translate(3px,3px); box-shadow:0 0 0 0 var(--border-strong);}
   button.action:disabled{opacity:.4; cursor:default; box-shadow:none;}
 
-  /* ---- How 2 tab ---- */
-  .stepdots{display:flex; justify-content:center; gap:6px; margin-bottom:16px;}
-  .stepdots span{width:7px; height:7px; border-radius:50%; border:1.4px solid var(--border-strong); background:none;}
-  .stepdots span.on{background:var(--accent); border-color:var(--accent);}
-  .step-eyebrow{font-size:.72rem; color:var(--accent2); font-weight:700; margin:0 0 4px; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.05em;}
-  .step-title{font-family:var(--font-display); font-weight:800; font-size:1.6rem; margin:0 0 12px; text-transform:uppercase; line-height:1.05;}
-  .step-body{font-size:.88rem; line-height:1.7; color:var(--text);}
-  .step-body p{margin:0 0 10px;}
-  .step-body p:last-child{margin-bottom:0;}
-  .step-body b{color:var(--accent);}
-  .mini-table{width:100%; border-collapse:collapse; font-size:.82rem; margin:10px 0; font-family:var(--font-mono);}
-  .mini-table td{padding:7px 8px; border-bottom:1px dashed var(--border-strong);}
-  .mini-table tr:last-child td{border-bottom:none;}
-  .mini-table td:first-child{color:var(--muted); width:42%;}
-  .mini-table tr.hl td{color:var(--accent); font-weight:700;}
-  .mini-table tr.hl{background:var(--panel2);}
-  .calc-line{font-family:var(--font-mono); font-size:.79rem; background:var(--panel2); border:1px solid var(--border); border-radius:2px; padding:8px 10px; margin:5px 0; overflow-x:auto;}
-  .stepnav{display:flex; gap:10px; margin-top:18px;}
-  .howto-sub{color:var(--muted); font-size:.8rem; margin:0 0 16px; line-height:1.5;}
-  .reflabel{font-family:var(--font-display); font-weight:800; font-size:1.15rem; margin:0 0 4px; text-transform:uppercase;}
-  .refhint{color:var(--muted); font-size:.76rem; margin:0 0 4px;}
+  /* Mode selector (Training) */
+  .modeselect{display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:14px;}
+  .modebtn{padding:9px 2px; border:1.4px solid var(--border-strong); border-radius:var(--radius); background:var(--panel); color:var(--muted); font-family:var(--font-mono); font-size:.65rem; text-transform:uppercase; letter-spacing:.02em; cursor:pointer; text-align:center;}
+  .modebtn.active{border-color:var(--accent); color:var(--accent); background:var(--panel2); font-weight:700;}
+  .modestatus{display:flex; justify-content:space-between; align-items:center; font-family:var(--font-mono); font-size:.76rem; color:var(--muted); margin-bottom:12px; padding:0 2px;}
+  .modestatus b{color:var(--text); font-weight:700;}
+  .streakdots{display:flex; gap:5px; justify-content:center; margin-bottom:12px;}
+  .streakdots span{width:11px; height:11px; border-radius:50%; border:1.5px solid var(--border-strong); background:none;}
+  .streakdots span.done{background:var(--good); border-color:var(--good);}
+  .streakdots span.fail{background:var(--danger); border-color:var(--danger);}
+  .modeend{text-align:center; padding:6px 0;}
+  .modeend .big{font-family:var(--font-display); font-size:2.2rem; font-weight:800; color:var(--accent); line-height:1;}
+  .modeend .lbl{font-size:.75rem; color:var(--muted); margin-top:4px;}
+
+  /* Heatmap */
+  .heatgrid{display:grid; grid-template-columns:repeat(7,1fr); gap:5px; margin:8px 0 4px;}
+  .heatgrid .cell{aspect-ratio:1; border-radius:2px; border:1.4px solid var(--border-strong); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:.58rem; color:var(--muted);}
+  .heatgrid .cell.s{background:var(--gold); border-color:var(--gold); color:#241a00; font-weight:700;}
+  .heatgrid .cell.a{background:var(--accent2); border-color:var(--accent2); color:#fff; font-weight:700;}
+  .heatgrid .cell.b{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:700;}
+  .heatgrid .cell.c{background:var(--panel2); border-color:var(--border-strong); font-weight:700;}
+  .heatgrid .cell.d{background:var(--panel2); border-color:var(--danger); color:var(--danger); font-weight:700;}
+  .heatgrid .cell.miss{border-color:var(--danger); border-style:dashed; color:var(--danger);}
+  .heatlegend{display:flex; flex-wrap:wrap; gap:10px; font-size:.68rem; color:var(--muted); font-family:var(--font-mono); margin-top:10px;}
+  .heatlegend span{display:inline-flex; align-items:center; gap:4px;}
+  .heatlegend i{width:9px; height:9px; border-radius:2px; display:inline-block; border:1.4px solid var(--border-strong);}
+
+  /* Achievements */
+  .achv{display:flex; gap:12px; align-items:flex-start; padding:13px 0; border-bottom:1px dashed var(--border-strong);}
+  .achv:last-child{border-bottom:none;}
+  .achv-badge{width:40px; height:40px; border-radius:50%; border:1.6px solid var(--border-strong); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:1.1rem; flex-shrink:0; color:var(--muted);}
+  .achv.unlocked .achv-badge{border-color:var(--gold); color:var(--gold);}
+  .achv-title{font-family:var(--font-display); font-weight:800; font-size:.95rem; text-transform:uppercase;}
+  .achv-desc{font-size:.76rem; color:var(--muted); margin-top:1px;}
+  .achv-date{font-size:.66rem; color:var(--accent2); margin-top:3px; font-family:var(--font-mono);}
+  .achv.locked{opacity:.5;}
+
+  /* Toast */
+  .toast{position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(16px); opacity:0; pointer-events:none; background:var(--panel); border:1.6px solid var(--gold); box-shadow:4px 4px 0 0 var(--border-strong); padding:12px 18px; z-index:1500; transition:opacity .25s ease, transform .25s ease; font-family:var(--font-mono); font-size:.78rem; max-width:320px; text-align:center;}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  .toast b{display:block; font-family:var(--font-display); font-weight:800; color:var(--gold); font-size:.95rem; text-transform:uppercase; margin-bottom:2px;}
+
+  /* Share */
+  .sharecanvas-wrap{display:flex; justify-content:center; margin-bottom:14px;}
+  .sharecanvas-wrap canvas{max-width:100%; height:auto; border:1.5px solid var(--text); box-shadow:5px 5px 0 0 var(--border-strong);}
 </style>
 </head>
 <body>
@@ -278,9 +315,11 @@
     <button class="tab active" data-tab="daily"><span class="idx">01</span>Daily</button>
     <button class="tab" data-tab="training"><span class="idx">02</span>Training</button>
     <button class="tab" data-tab="howto"><span class="idx">03</span>How 2</button>
+    <button class="tab" data-tab="stats"><span class="idx">04</span>Stats</button>
+    <button class="tab" data-tab="achievements"><span class="idx">05</span>Achievements</button>
   </div>
   <p class="drawer-eyebrow">Display</p>
-  <div class="themebar" style="margin-bottom:18px;">
+  <div class="themebar">
     <button class="themebtn" data-theme-btn="bright" title="Bright" aria-label="Bright theme">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.6" y1="4.6" x2="6.7" y2="6.7"/><line x1="17.3" y1="17.3" x2="19.4" y2="19.4"/><line x1="19.4" y1="4.6" x2="17.3" y2="6.7"/><line x1="6.7" y1="17.3" x2="4.6" y2="19.4"/></svg>
     </button>
@@ -291,8 +330,12 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5Z"/></svg>
     </button>
   </div>
-  <p class="drawer-footer">A game by Kevin Serrano &middot; v1.0</p>
+  <div class="togglerow"><span>Sound</span><div class="switch" id="soundSwitch"></div></div>
+  <div class="togglerow"><span>Haptics (where supported)</span><div class="switch" id="hapticSwitch"></div></div>
+  <p class="drawer-footer">A game by Kevin Serrano &middot; v1.5</p>
 </nav>
+
+<div class="toast" id="toast"><b id="toastTitle"></b><span id="toastBody"></span></div>
 
 <div class="wrap">
 
@@ -317,15 +360,16 @@
     </svg>
     <div class="wordmark" id="wordmark"></div>
     <p class="byline">A game by Kevin Serrano</p>
-    <p class="tagline">Every date lands on exactly one weekday. Eliminate the rest, find it fast.</p>
+    <p class="tagline">Every date lands on exactly one weekday. One tap. Right or wrong, you'll see why.</p>
   </header>
 
   <div class="masthead">
-    <span>Vol. 1</span>
+    <span id="mastheadLeft">Vol. 1</span>
     <b id="mastheadLabel">Daily Edition</b>
-    <span>No. 1</span>
+    <span id="mastheadRight">No. 1</span>
   </div>
 
+  <!-- DAILY -->
   <section class="panel active" id="panel-daily">
     <div class="rowline"><span class="l" id="dailyDateLabel"></span><span class="r" id="countdown"></span></div>
     <div id="streakChipSlot"></div>
@@ -333,38 +377,51 @@
     <div class="card" id="dailyGameCard">
       <div class="puzzledate" id="dailyPuzzleDate">–</div>
       <div class="timerrow"><span class="timer" id="dailyTimer">0.0s</span></div>
-      <div class="penalty" id="dailyPenalty">&nbsp;</div>
       <div class="daybtns" id="dailyButtons"></div>
-      <div class="feedback" id="dailyFeedback">Tap the day of the week this date fell on.</div>
+      <div class="feedback" id="dailyFeedback">Tap the day of the week this date fell on. One shot.</div>
       <button class="giveup" id="dailyGiveUp">I give up — show me the answer</button>
     </div>
+    <div id="dailyResultSlot"></div>
 
     <div id="dailyRankSlot"></div>
     <div id="dailyCodecSlot"></div>
+    <div id="dailyShareSlot"></div>
+    <button class="traincta" id="dailyTrainCta" style="display:none;">Waiting for reset? Head to Training &rarr;</button>
   </section>
 
+  <!-- TRAINING -->
   <section class="panel" id="panel-training">
-    <div class="stats">
+    <div class="modeselect" id="modeSelect">
+      <button class="modebtn active" data-mode="practice">Practice</button>
+      <button class="modebtn" data-mode="streak10">10 Streak</button>
+      <button class="modebtn" data-mode="blitz">Blitz 60</button>
+      <button class="modebtn" data-mode="survival">Survival</button>
+    </div>
+
+    <div class="stats" id="trPracticeStats">
       <div class="stat"><div class="n" id="trScore">0</div><div class="l">Solved</div></div>
       <div class="stat" id="trStreakStat"><div class="n" id="trStreak">0</div><div class="l">Streak</div></div>
       <div class="stat"><div class="n" id="trBest">0</div><div class="l">Best</div></div>
       <div class="stat"><div class="n" id="trAvg">—</div><div class="l">Avg time</div></div>
     </div>
 
-    <div class="card">
+    <div class="modestatus" id="modeStatus" style="display:none;"></div>
+    <div class="streakdots" id="streakDots" style="display:none;"></div>
+
+    <div class="card" id="trGameCard">
       <div class="puzzledate" id="trPuzzleDate">–</div>
       <div class="timerrow"><span class="timer" id="trTimer">0.0s</span></div>
-      <div class="penalty" id="trPenalty">&nbsp;</div>
       <div class="daybtns" id="trButtons"></div>
-      <div class="feedback" id="trFeedback">Tap the day of the week this date fell on.</div>
+      <div class="feedback" id="trFeedback">Tap the day of the week this date fell on. One shot.</div>
       <button class="giveup" id="trGiveUp">I give up — show me the answer</button>
-      <div class="actionrow"><button class="action primary" id="trNextBtn">Next date</button></div>
+      <div class="actionrow" id="trActionRow"><button class="action primary" id="trNextBtn">Next date</button></div>
     </div>
 
     <div id="trRankSlot"></div>
     <div id="trCodecSlot"></div>
   </section>
 
+  <!-- HOW 2 -->
   <section class="panel" id="panel-howto">
     <div class="card">
       <div class="stepdots" id="stepDots"></div>
@@ -379,10 +436,9 @@
 
     <div class="card">
       <p class="reflabel">Try one yourself</p>
-      <p class="howto-sub" style="margin-bottom:14px;">No clock, no pressure — just practice the steps.</p>
+      <p class="howto-sub" style="margin-bottom:14px;">No clock pressure — just practice the steps. One tap, then the answer either way.</p>
       <div class="puzzledate" id="hwPuzzleDate">–</div>
       <div class="timerrow"><span class="timer" id="hwTimer">0.0s</span></div>
-      <div class="penalty" id="hwPenalty">&nbsp;</div>
       <div class="daybtns" id="hwButtons"></div>
       <div class="feedback" id="hwFeedback">Tap the day of the week this date fell on.</div>
       <button class="giveup" id="hwGiveUp">I give up — show me the answer</button>
@@ -411,15 +467,55 @@
     </div>
   </section>
 
-</div>
+  <!-- STATS -->
+  <section class="panel" id="panel-stats">
+    <div class="stats">
+      <div class="stat"><div class="n" id="stTotal">0</div><div class="l">Played</div></div>
+      <div class="stat"><div class="n" id="stAcc">—</div><div class="l">Accuracy</div></div>
+      <div class="stat"><div class="n" id="stAvg">—</div><div class="l">Avg time</div></div>
+      <div class="stat"><div class="n" id="stSrank">0</div><div class="l">S ranks</div></div>
+    </div>
+    <div class="card">
+      <p class="reflabel">This month</p>
+      <p class="refhint" id="heatSub">Daily puzzles solved this calendar month.</p>
+      <div class="heatgrid" id="heatGrid"></div>
+      <div class="heatlegend">
+        <span><i style="background:var(--gold); border-color:var(--gold);"></i>S</span>
+        <span><i style="background:var(--accent2); border-color:var(--accent2);"></i>A</span>
+        <span><i style="background:var(--accent); border-color:var(--accent);"></i>B</span>
+        <span><i style="background:var(--panel2);"></i>C/D</span>
+        <span><i style="border-color:var(--danger); border-style:dashed;"></i>missed</span>
+      </div>
+    </div>
+    <div class="card">
+      <p class="reflabel">Daily streak</p>
+      <div class="rowline" style="margin-top:8px;"><span class="l">Current</span><span class="r" id="stCurStreak">0 days</span></div>
+      <div class="rowline"><span class="l">Best ever</span><span class="r" id="stBestStreak">0 days</span></div>
+      <div class="rowline"><span class="l">Personal best time</span><span class="r" id="stBestTime">—</span></div>
+    </div>
+  </section>
 
+  <!-- ACHIEVEMENTS -->
+  <section class="panel" id="panel-achievements">
+    <div class="card">
+      <p class="reflabel">Achievements</p>
+      <p class="refhint" id="achvProgress" style="margin-bottom:6px;"></p>
+      <div id="achvList"></div>
+    </div>
+  </section>
+
+</div>
 <script>
 (async function(){
 const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const PENALTY_MS = 4000;
 const REDUCE_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/* ---------- storage helpers ---------- */
+function readJSON(key, fallback){ try { const v = JSON.parse(localStorage.getItem(key) || 'null'); return v===null ? fallback : v; } catch(e){ return fallback; } }
+function writeJSON(key, val){ try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){} }
+
+/* ---------- Doomsday math ---------- */
 function isLeap(y){ return (y%4===0 && y%100!==0) || y%400===0; }
 function centuryAnchor(century){ const c=((century%4)+4)%4; return {0:2,1:0,2:5,3:3}[c]; }
 function doomsdayForYear(year){
@@ -442,6 +538,7 @@ function dayOfWeek(year, month, day){
 function daysInMonth(year, month){ return new Date(year, month, 0).getDate(); }
 function fmtTime(ms){ return (ms/1000).toFixed(1) + 's'; }
 function ordinal(n){ const s=["th","st","nd","rd"], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
+function localDateKey(d){ const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${day}`; }
 
 function hashString(s){
   let h=1779033703 ^ s.length;
@@ -463,36 +560,65 @@ function randomPuzzle(rand){
   return {year, month, day, correctIdx: dayOfWeek(year, month, day)};
 }
 
-function debriefLines(puzzle){
-  const {year, month, day} = puzzle;
-  const century=Math.floor(year/100), yy=year%100, anchor=centuryAnchor(century);
-  const a=Math.floor(yy/12), b=yy%12, c=Math.floor(b/4), sum=a+b+c+anchor, dd=sum%7;
-  const anchorDate=doomsdayAnchorDate(year, month), diff=day-anchorDate, diffAbs=Math.abs(diff);
+/* ---------- Plain-language explanation (default) + exact math (behind a toggle) ---------- */
+function explainLines(puzzle){
+  const {year, month, day, correctIdx} = puzzle;
   const monthName=MONTH_NAMES[month-1];
-  return [
-    `Let's crack ${monthName} ${day}, ${year}.`,
-    `Century ${century}00 -> anchor = ${DAYS[anchor]} (index ${anchor}).`,
-    `Last two digits: ${yy}.`,
-    `a = ${yy}/12 rounded down = ${a}   b = ${yy} mod 12 = ${b}   c = ${b}/4 rounded down = ${c}`,
-    `${a} + ${b} + ${c} + ${anchor} = ${sum}  ->  ${sum} mod 7 = ${dd}  ->  ${DAYS[dd]}. That's ${year}'s doomsday.`,
-    `${monthName} ${anchorDate} always sits on doomsday, so it's a ${DAYS[dd]} too.`,
+  const century=Math.floor(year/100), yy=year%100, anchor=centuryAnchor(century);
+  const a=Math.floor(yy/12), b=yy%12, c=Math.floor(b/4), dd=(a+b+c+anchor)%7;
+  const anchorDate=doomsdayAnchorDate(year, month);
+  const diff=day-anchorDate, diffAbs=Math.abs(diff);
+  const simple = [
+    `${century}00s years all start from ${DAYS[anchor]}.`,
+    `For ${year} specifically, that shifts to ${DAYS[dd]}.`,
+    `${monthName} ${anchorDate} always lands on that day.`,
     diffAbs===0
-      ? `${day} IS the ${ordinal(anchorDate)} -- no counting needed.`
-      : `${monthName} ${anchorDate} -> ${monthName} ${day} is ${diffAbs} day${diffAbs===1?'':'s'} ${diff>0?'later':'earlier'}, which loops to ${DAYS[puzzle.correctIdx]}.`,
-    `Answer: ${DAYS[puzzle.correctIdx]}.`
+      ? `${monthName} ${day} is that exact date.`
+      : `Count ${diffAbs} day${diffAbs===1?'':'s'} ${diff>0?'forward':'back'} to ${monthName} ${day} -- landing on ${DAYS[correctIdx]}.`
   ];
+  const math = [
+    `Century ${century}00 -&gt; anchor index ${anchor} (${DAYS[anchor]}).`,
+    `yy = ${yy}. a = floor(${yy}/12) = ${a}. b = ${yy} mod 12 = ${b}. c = floor(${b}/4) = ${c}.`,
+    `(a + b + c + anchor) mod 7 = (${a}+${b}+${c}+${anchor}) mod 7 = ${dd} -&gt; ${DAYS[dd]}.`,
+    `Offset from ${monthName} ${anchorDate}: ${diff} -&gt; (${dd} ${diff>=0?'+':'-'} ${diffAbs}) mod 7 = ${correctIdx} -&gt; ${DAYS[correctIdx]}.`
+  ];
+  return { headline: `${monthName} ${day}, ${year} is a ${DAYS[correctIdx]}.`, simple, math };
 }
 
-function gradeFor(timeMs){
-  if (timeMs < 30000) return {letter:'S', label:'Savant'};
-  if (timeMs < 60000) return {letter:'A', label:'Sharp'};
-  if (timeMs < 90000) return {letter:'B', label:'Solid'};
-  if (timeMs < 120000) return {letter:'C', label:'Scrappy'};
-  return {letter:'D', label:'Slowpoke'};
+/* ---------- Sound (synthesized, off by default) + haptics ---------- */
+let audioCtx = null;
+function ensureAudio(){ if(!audioCtx){ try { audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} } return audioCtx; }
+function soundOn(){ return readJSON('doomsday-sound', {on:false}).on; }
+function hapticOn(){ return readJSON('doomsday-haptic', {on:false}).on; }
+function playSound(kind){
+  if(!soundOn()) return;
+  const ctx=ensureAudio(); if(!ctx) return;
+  const now=ctx.currentTime;
+  function tone(freq,start,dur,type,vol){
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type=type||'sine'; o.frequency.value=freq;
+    g.gain.setValueAtTime(0, now+start);
+    g.gain.linearRampToValueAtTime(vol||0.05, now+start+0.01);
+    g.gain.exponentialRampToValueAtTime(0.001, now+start+dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(now+start); o.stop(now+start+dur+0.03);
+  }
+  if(kind==='correct'){ tone(660,0,0.09,'triangle',0.05); tone(880,0.08,0.14,'triangle',0.05); }
+  else if(kind==='wrong'){ tone(180,0,0.2,'sawtooth',0.05); }
+  else if(kind==='giveup'){ tone(260,0,0.12,'sine',0.04); tone(200,0.1,0.18,'sine',0.04); }
+  else if(kind==='achievement'){ tone(520,0,0.08,'triangle',0.05); tone(660,0.08,0.08,'triangle',0.05); tone(880,0.16,0.24,'triangle',0.06); }
+  else if(kind==='srank'){ tone(660,0,0.08,'triangle',0.05); tone(880,0.07,0.08,'triangle',0.05); tone(1100,0.14,0.08,'triangle',0.05); tone(1320,0.21,0.32,'triangle',0.06); }
+}
+function vibrate(kind){
+  if(!hapticOn() || !navigator.vibrate) return;
+  try {
+    if(kind==='correct') navigator.vibrate(15);
+    else if(kind==='wrong') navigator.vibrate([10,30,10]);
+    else navigator.vibrate(8);
+  } catch(e){}
 }
 
-const WRONG_QUIPS = ["nope, not it.", "negative.", "try again.", "swing and a miss.", "not that one.", "close, but no.", "strike it out.", "keep going."];
-
+/* ---------- Typewriter / codec engine ---------- */
 function delay(ms){ return new Promise(r => setTimeout(r, ms)); }
 function typeInto(el, text, speed){
   return new Promise(resolve => {
@@ -506,8 +632,6 @@ function typeInto(el, text, speed){
     }, speed || 12);
   });
 }
-async function typeFeedback(el, text){ await typeInto(el, text, 14); }
-
 function codecShell(label){
   const box = document.createElement('div'); box.className = 'codec';
   box.innerHTML = `<div class="codec-head"><span class="codec-dot pulse"></span><span>${label}</span></div><div class="codec-body"></div>`;
@@ -518,38 +642,166 @@ async function playCodec(slotEl, label, lines){
   const box = codecShell(label); slotEl.appendChild(box);
   const body = box.querySelector('.codec-body');
   for (const line of lines){
-    const p = document.createElement('div'); p.className='codec-line'; body.appendChild(p);
-    await typeInto(p, line, 10);
-    await delay(REDUCE_MOTION ? 0 : 130);
+    const text = typeof line === 'string' ? line : line.text;
+    const cls = typeof line === 'string' ? '' : (line.cls || '');
+    const p = document.createElement('div'); p.className='codec-line'+(cls?(' '+cls):'');
+    body.appendChild(p);
+    await typeInto(p, text, 10);
+    await delay(REDUCE_MOTION ? 0 : 120);
   }
   box.querySelector('.codec-dot').classList.remove('pulse');
+  return box;
 }
 function renderCodecStatic(slotEl, label, lines){
   slotEl.innerHTML = '';
   const box = codecShell(label); slotEl.appendChild(box);
   const body = box.querySelector('.codec-body');
-  lines.forEach(line => { const p=document.createElement('div'); p.className='codec-line'; p.textContent=line; body.appendChild(p); });
+  lines.forEach(line => {
+    const text = typeof line === 'string' ? line : line.text;
+    const cls = typeof line === 'string' ? '' : (line.cls || '');
+    const p = document.createElement('div'); p.className='codec-line'+(cls?(' '+cls):'');
+    p.innerHTML = text;
+    body.appendChild(p);
+  });
   box.querySelector('.codec-dot').classList.remove('pulse');
+  return box;
+}
+function appendMathToggle(box, mathLines){
+  if(!box) return;
+  const body = box.querySelector('.codec-body');
+  const toggle = document.createElement('span');
+  toggle.className = 'mathtoggle';
+  toggle.textContent = 'See the exact math';
+  const mbox = document.createElement('div');
+  mbox.className = 'mathbox';
+  mbox.innerHTML = mathLines.map(l => `<div>${l}</div>`).join('');
+  toggle.addEventListener('click', () => {
+    const show = !mbox.classList.contains('show');
+    mbox.classList.toggle('show', show);
+    toggle.textContent = show ? 'Hide the exact math' : 'See the exact math';
+  });
+  body.appendChild(toggle);
+  body.appendChild(mbox);
+}
+async function showRoundCodec(slotEl, puzzle, outcome){
+  const ex = explainLines(puzzle);
+  const label = outcome==='solved' ? 'Confirmed' : (outcome==='missed' ? 'Missed' : 'Debrief');
+  const introMap = { solved:"Nice — here's the check:", missed:"Not quite — here's why:", gaveup:"Here's why:" };
+  const lines = [ {text: ex.headline, cls:'headline'}, {text: introMap[outcome]}, ...ex.simple.map(s => ({text:s})) ];
+  const box = await playCodec(slotEl, label, lines);
+  appendMathToggle(box, ex.math);
+  return box;
+}
+
+/* ---------- Grades ---------- */
+const GRADE_THRESHOLDS = [
+  {letter:'S', label:'Savant', max:30000},
+  {letter:'A', label:'Sharp', max:60000},
+  {letter:'B', label:'Solid', max:90000},
+  {letter:'C', label:'Scrappy', max:120000},
+  {letter:'D', label:'Slowpoke', max:Infinity},
+];
+function gradeFor(timeMs){ for (const g of GRADE_THRESHOLDS){ if (timeMs < g.max) return g; } return GRADE_THRESHOLDS[GRADE_THRESHOLDS.length-1]; }
+function distanceToNext(timeMs){
+  const idx = GRADE_THRESHOLDS.findIndex(g => timeMs < g.max);
+  if (idx <= 0) return null;
+  const better = GRADE_THRESHOLDS[idx-1];
+  return { grade: better, ms: timeMs - better.max };
+}
+function distLine(timeMs){
+  const d = distanceToNext(timeMs);
+  if (!d) return 'Top rank — nowhere higher to climb.';
+  return `${(d.ms/1000).toFixed(1)}s from ${d.grade.letter} rank.`;
 }
 function showRankBadge(slotEl, grade){
-  slotEl.innerHTML = `<div class="rankpill-wrap"><span class="rankpill shine grade-${grade.letter.toLowerCase()}">${grade.letter} rank -- ${grade.label}</span></div>`;
+  slotEl.innerHTML = `<div class="rankpill-wrap${grade.letter==='S'?' srank-glow':''}"><span class="rankpill shine grade-${grade.letter.toLowerCase()}">${grade.letter} rank -- ${grade.label}</span></div>`;
+  if (grade.letter==='S' && !REDUCE_MOTION){
+    const wrap = slotEl.querySelector('.rankpill-wrap');
+    const burstEl = document.createElement('div'); burstEl.className='srank-burst';
+    for (let i=0;i<10;i++){ const s=document.createElement('span'); s.style.setProperty('--ang', (i*36)+'deg'); s.style.animationDelay=(i*0.02)+'s'; burstEl.appendChild(s); }
+    wrap.appendChild(burstEl);
+  }
+  if (grade.letter==='S') playSound('srank');
 }
 function clearRankBadge(slotEl){ slotEl.innerHTML = ''; }
 
-/* Build the full "show your work" line set for a successful solve */
-function buildSolvedLines(puzzle, result, perf){
-  const lines = [`Nailed it -- let's check your work.`, ...debriefLines(puzzle)];
-  let perfLine = `Time: ${fmtTime(result.timeMs)}${result.wrongGuesses ? ` (+${result.wrongGuesses} miss${result.wrongGuesses===1?'':'es'})` : ''}.`;
-  if (perf && perf.isNewBest) perfLine += ' New personal best!';
-  else if (perf && typeof perf.delta === 'number'){
-    const d = Math.abs(perf.delta/1000).toFixed(1);
-    perfLine += perf.delta < 0 ? ` ${d}s faster than your average.` : ` ${d}s slower than your average.`;
-  }
-  lines.push(perfLine);
-  return lines;
+/* ---------- History log, meta, achievements ---------- */
+function addHistory(entry){
+  const hist = readJSON('doomsday-history', []);
+  hist.push(entry);
+  if (hist.length > 800) hist.splice(0, hist.length - 800);
+  writeJSON('doomsday-history', hist);
 }
-function buildGiveUpLines(puzzle){
-  return [`Tapping out -- here's the play-by-play.`, ...debriefLines(puzzle), `Now you know it for next time.`];
+function getMeta(){ return readJSON('doomsday-meta', {weekdays:[false,false,false,false,false,false,false], trainingCount:0, totalSolved:0, totalMissed:0, totalGaveUp:0}); }
+function setMeta(m){ writeJSON('doomsday-meta', m); }
+
+const ACHIEVEMENTS = [
+  {id:'first_solve', title:'First Blood', desc:'Solve your first puzzle.'},
+  {id:'first_sub10', title:'Quickdraw', desc:'Solve any puzzle in under 10 seconds.'},
+  {id:'first_srank', title:'S Tier', desc:'Earn your first S rank.'},
+  {id:'streak_3', title:'On A Roll', desc:'Reach a 3-day streak.'},
+  {id:'streak_7', title:'Weekly Regular', desc:'Reach a 7-day streak.'},
+  {id:'streak_30', title:'Creature Of Habit', desc:'Reach a 30-day streak.'},
+  {id:'full_week', title:'Every Day Counts', desc:'Solve a puzzle landing on all 7 weekdays.'},
+  {id:'training_50', title:'Drilling In', desc:'Complete 50 training rounds.'},
+  {id:'training_200', title:'Grizzled Veteran', desc:'Complete 200 training rounds.'},
+  {id:'century_club', title:'Century Club', desc:'Solve 100 puzzles, any mode.'},
+];
+function getUnlocked(){ return readJSON('doomsday-achievements', {}); }
+function unlockAchievement(id){
+  const u = getUnlocked();
+  if (u[id]) return false;
+  u[id] = new Date().toISOString();
+  writeJSON('doomsday-achievements', u);
+  const def = ACHIEVEMENTS.find(a => a.id===id);
+  if (def) showToast(def.title, def.desc);
+  playSound('achievement');
+  return true;
+}
+function checkAchievements(ctx){
+  if (ctx.totalSolved>=1) unlockAchievement('first_solve');
+  if (ctx.result==='solved' && ctx.timeMs<10000) unlockAchievement('first_sub10');
+  if (ctx.grade==='S') unlockAchievement('first_srank');
+  if (ctx.streak>=3) unlockAchievement('streak_3');
+  if (ctx.streak>=7) unlockAchievement('streak_7');
+  if (ctx.streak>=30) unlockAchievement('streak_30');
+  if (ctx.weekdaysSolved && ctx.weekdaysSolved.every(Boolean)) unlockAchievement('full_week');
+  if (ctx.trainingCount>=50) unlockAchievement('training_50');
+  if (ctx.trainingCount>=200) unlockAchievement('training_200');
+  if (ctx.totalSolved>=100) unlockAchievement('century_club');
+}
+function recordRound({mode, result, timeMs, correctIdx, isTrainingRound}){
+  const grade = result==='solved' ? gradeFor(timeMs).letter : null;
+  const now = new Date();
+  addHistory({ mode, result, timeMs: result==='solved' ? Math.round(timeMs) : null, grade, correctIdx, ts: now.toISOString(), dateKey: localDateKey(now) });
+
+  const meta = getMeta();
+  if (isTrainingRound) meta.trainingCount += 1;
+  if (result==='solved'){ meta.totalSolved += 1; meta.weekdays[correctIdx] = true; }
+  else if (result==='missed') meta.totalMissed += 1;
+  else if (result==='gaveup') meta.totalGaveUp += 1;
+  setMeta(meta);
+
+  const dailyStats = readJSON('doomsday-stats', {});
+  checkAchievements({
+    result, timeMs, grade,
+    streak: dailyStats.streak || 0,
+    trainingCount: meta.trainingCount,
+    weekdaysSolved: meta.weekdays,
+    totalSolved: meta.totalSolved,
+  });
+}
+
+/* ---------- Toast ---------- */
+const toastEl = document.getElementById('toast');
+const toastTitleEl = document.getElementById('toastTitle');
+const toastBodyEl = document.getElementById('toastBody');
+let toastTimer = null;
+function showToast(title, body){
+  toastTitleEl.textContent = title; toastBodyEl.textContent = body;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 3800);
 }
 
 /* ---------- Theme ---------- */
@@ -569,29 +821,31 @@ function initTheme(){
 document.querySelectorAll('.themebtn').forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.themeBtn)));
 initTheme();
 
+function initSwitch(id, key){
+  const el = document.getElementById(id);
+  const on = readJSON(key, {on:false}).on;
+  el.classList.toggle('on', on);
+  el.addEventListener('click', () => {
+    const cur = readJSON(key, {on:false}).on;
+    writeJSON(key, {on: !cur});
+    el.classList.toggle('on', !cur);
+  });
+}
+initSwitch('soundSwitch', 'doomsday-sound');
+initSwitch('hapticSwitch', 'doomsday-haptic');
+
+/* ---------- Wordmark ---------- */
 const wordmarkEl = document.getElementById('wordmark');
 const WORDMARK_TILT = [-3, 2, -2, 3, -2, 2, -3, 2];
 "DOOMSDAY".split('').forEach((ch, i) => {
   const s = document.createElement('span');
-  s.textContent = ch;
-  s.className = 'shine';
+  s.textContent = ch; s.className = 'shine';
   s.style.transform = `rotate(${WORDMARK_TILT[i % WORDMARK_TILT.length]}deg)`;
   s.style.setProperty('--shine-delay', `${i * 0.4}s`);
   wordmarkEl.appendChild(s);
 });
 
-document.querySelectorAll('.tab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b === btn));
-    const target = btn.dataset.tab;
-    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + target));
-    const labels = { daily:'Daily Edition', training:'Training Grounds', howto:'How To' };
-    mastheadLabel.textContent = labels[target] || target;
-    closeMenu();
-  });
-});
-
-/* ---------- Main menu drawer ---------- */
+/* ---------- Menu / tabs / masthead ---------- */
 const menuTrigger = document.getElementById('menuTrigger');
 const menuDrawer = document.getElementById('menuDrawer');
 const menuBackdrop = document.getElementById('menuBackdrop');
@@ -601,7 +855,21 @@ function closeMenu(){ menuDrawer.classList.remove('open'); menuBackdrop.classLis
 menuTrigger.addEventListener('click', openMenu);
 menuBackdrop.addEventListener('click', closeMenu);
 
-/* ---------- Boot sequence: flip through a calendar, then reveal ---------- */
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b === btn));
+    const target = btn.dataset.tab;
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + target));
+    const labels = { daily:'Daily Edition', training:'Training Grounds', howto:'How To', stats:'Stats & Records', achievements:'Achievements' };
+    mastheadLabel.textContent = labels[target] || target;
+    if (target==='stats') renderStatsPanel();
+    if (target==='achievements') renderAchievementsPanel();
+    closeMenu();
+  });
+});
+function switchTab(name){ const b=document.querySelector(`.tab[data-tab="${name}"]`); if(b) b.click(); }
+
+/* ---------- Boot sequence ---------- */
 const bootOverlay = document.getElementById('bootOverlay');
 const bootMonth = document.getElementById('bootMonth');
 const bootDay = document.getElementById('bootDay');
@@ -636,17 +904,19 @@ async function runBoot(){
 }
 runBoot();
 
-function runRound(puzzle, ui, onFinish){
+/* ---------- One-shot round engine (shared by Daily / Training / How 2) ---------- */
+let roundGen = 0;
+function runOneShotRound(puzzle, ui, onResult){
+  const myGen = ++roundGen;
   let startTime = performance.now();
-  let wrongGuesses = 0;
-  let finished = false;
+  let resolved = false;
 
   ui.dateEl.textContent = `${MONTH_NAMES[puzzle.month-1]} ${puzzle.day}, ${puzzle.year}`;
   ui.buttonsEl.innerHTML = '';
-  ui.penaltyEl.textContent = '\u00A0';
-  ui.feedbackEl.textContent = 'Tap the day of the week this date fell on.';
+  ui.feedbackEl.textContent = 'Tap the day of the week this date fell on. One shot.';
   ui.giveUpBtn.style.display = 'block';
   ui.giveUpBtn.disabled = false;
+  ui.timerEl.textContent = '0.0s';
 
   DAYS.forEach((d, i) => {
     const btn = document.createElement('button');
@@ -656,50 +926,78 @@ function runRound(puzzle, ui, onFinish){
   });
 
   const tick = setInterval(() => {
-    if (finished) return;
-    ui.timerEl.textContent = fmtTime(performance.now() - startTime) + (wrongGuesses ? ` +${wrongGuesses*4}.0s pen` : '');
+    if (myGen !== roundGen){ clearInterval(tick); return; }
+    if (resolved) return;
+    ui.timerEl.textContent = fmtTime(performance.now() - startTime);
   }, 100);
 
   function finish(){
-    finished = true; clearInterval(tick);
-    ui.giveUpBtn.style.display = 'none';
+    resolved = true; clearInterval(tick);
+    ui.giveUpBtn.disabled = true; ui.giveUpBtn.style.display = 'none';
     [...ui.buttonsEl.children].forEach(b => b.disabled = true);
   }
 
   function guess(idx, btn){
-    if (finished || btn.disabled) return;
+    if (myGen !== roundGen || resolved) return;
+    finish();
+    const timeMs = performance.now() - startTime;
+    ui.timerEl.textContent = fmtTime(timeMs);
     if (idx === puzzle.correctIdx){
-      finish();
       btn.classList.add('correct', 'shine');
-      const totalMs = (performance.now() - startTime) + wrongGuesses * PENALTY_MS;
-      ui.timerEl.textContent = fmtTime(totalMs);
-      typeFeedback(ui.feedbackEl, `> got it. ${DAYS[puzzle.correctIdx]}.`);
-      onFinish({ timeMs: totalMs, wrongGuesses, gaveUp:false });
+      typeInto(ui.feedbackEl, `> correct. ${DAYS[puzzle.correctIdx]}.`, 14);
+      playSound('correct'); vibrate('correct');
+      onResult({ result:'solved', timeMs, chosenIdx:idx });
     } else {
-      wrongGuesses += 1;
-      btn.classList.add('eliminated'); btn.disabled = true;
-      const quip = WRONG_QUIPS[Math.floor(Math.random()*WRONG_QUIPS.length)];
-      typeFeedback(ui.penaltyEl, `> ${quip} +${(PENALTY_MS/1000).toFixed(1)}s`);
+      btn.classList.add('wrong');
+      [...ui.buttonsEl.children].forEach(b => { if (parseInt(b.dataset.idx) === puzzle.correctIdx) b.classList.add('answer','shine'); });
+      typeInto(ui.feedbackEl, `> not quite. it was ${DAYS[puzzle.correctIdx]}.`, 14);
+      playSound('wrong'); vibrate('wrong');
+      onResult({ result:'missed', timeMs, chosenIdx:idx });
     }
   }
 
   ui.giveUpBtn.onclick = () => {
-    if (finished) return;
+    if (myGen !== roundGen || resolved) return;
     finish();
-    const totalMs = (performance.now() - startTime) + wrongGuesses * PENALTY_MS;
-    ui.timerEl.textContent = fmtTime(totalMs);
-    typeFeedback(ui.feedbackEl, `> tapping out. answer incoming.`);
-    [...ui.buttonsEl.children].forEach(b => { if (parseInt(b.dataset.idx) === puzzle.correctIdx) b.classList.add('answer', 'shine'); });
-    onFinish({ timeMs: totalMs, wrongGuesses, gaveUp:true });
+    const timeMs = performance.now() - startTime;
+    ui.timerEl.textContent = fmtTime(timeMs);
+    typeInto(ui.feedbackEl, `> giving up. answer incoming.`, 14);
+    [...ui.buttonsEl.children].forEach(b => { if (parseInt(b.dataset.idx) === puzzle.correctIdx) b.classList.add('answer','shine'); });
+    playSound('giveup');
+    onResult({ result:'gaveup', timeMs, chosenIdx:null });
   };
 }
-
+function renderStaticBoard(buttonsEl, puzzle, chosenIdx, result){
+  buttonsEl.innerHTML = '';
+  DAYS.forEach((d, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = d.slice(0,3); btn.disabled = true;
+    if (result==='solved' && i===puzzle.correctIdx) btn.classList.add('correct');
+    if (result==='missed' && i===chosenIdx) btn.classList.add('wrong');
+    if (result!=='solved' && i===puzzle.correctIdx) btn.classList.add('answer');
+    buttonsEl.appendChild(btn);
+  });
+}
+function renderResultLine(slotEl, res, grade, perf){
+  let html;
+  if (res.result==='solved'){
+    html = `<div class="result"><div class="big">${fmtTime(res.timeMs)}</div><div class="lbl">Solved &middot; ${grade.letter} rank</div><div class="distline">${perf && perf.isNewBest ? 'New personal best!' : distLine(res.timeMs)}</div></div>`;
+  } else if (res.result==='missed'){
+    html = `<div class="result missed"><div class="big">${fmtTime(res.timeMs)}</div><div class="lbl">Missed this one</div></div>`;
+  } else {
+    html = `<div class="result missed"><div class="lbl">Gave up</div></div>`;
+  }
+  slotEl.innerHTML = html;
+}
 /* ================= DAILY ================= */
 const dateStr = todayUTCStr();
 const dailyPuzzle = randomPuzzle(seededRand('doomsday-drill-v1-' + dateStr));
+const DAILY_EPOCH_MS = Date.UTC(2026, 8, 19);
+const [dsY, dsM, dsD] = dateStr.split('-').map(Number);
+const puzzleNumber = Math.floor((Date.UTC(dsY, dsM-1, dsD) - DAILY_EPOCH_MS) / 86400000) + 1;
 
 document.getElementById('dailyDateLabel').textContent =
-  new Date(dateStr + 'T00:00:00Z').toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric', timeZone:'UTC'});
+  new Date(dateStr + 'T00:00:00Z').toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric', timeZone:'UTC'}) + `  ·  #${puzzleNumber}`;
 
 const countdownEl = document.getElementById('countdown');
 function updateCountdown(){
@@ -712,24 +1010,21 @@ function updateCountdown(){
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
-const dailyGameCard = document.getElementById('dailyGameCard');
 const dailyUI = {
   dateEl: document.getElementById('dailyPuzzleDate'),
   timerEl: document.getElementById('dailyTimer'),
-  penaltyEl: document.getElementById('dailyPenalty'),
   buttonsEl: document.getElementById('dailyButtons'),
   feedbackEl: document.getElementById('dailyFeedback'),
   giveUpBtn: document.getElementById('dailyGiveUp'),
 };
 const dailyCodecSlot = document.getElementById('dailyCodecSlot');
 const dailyRankSlot = document.getElementById('dailyRankSlot');
+const dailyResultSlot = document.getElementById('dailyResultSlot');
+const dailyShareSlot = document.getElementById('dailyShareSlot');
+const dailyTrainCta = document.getElementById('dailyTrainCta');
 const streakChipSlot = document.getElementById('streakChipSlot');
 
-/* Daily state lives on-device only: one status entry per date, plus a running
-   streak/best-time record. No account, no server -- everything below is
-   local storage reads/writes wrapped in try/catch. */
-function readJSON(key, fallback){ try { return JSON.parse(localStorage.getItem(key) || 'null') || fallback; } catch(e){ return fallback; } }
-function writeJSON(key, val){ try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){} }
+dailyTrainCta.addEventListener('click', () => switchTab('training'));
 
 function getDailyStatus(){ return readJSON('doomsday-daily-' + dateStr, null); }
 function setDailyStatus(obj){ writeJSON('doomsday-daily-' + dateStr, obj); }
@@ -740,7 +1035,6 @@ function renderStreakChip(streak, bestTimeMs){
   if (!streak){ streakChipSlot.innerHTML = ''; return; }
   streakChipSlot.innerHTML = `<div class="streakchip lit">Day streak <b>${streak}</b>${bestTimeMs ? ` &middot; best ${fmtTime(bestTimeMs)}` : ''}</div>`;
 }
-
 function updateStatsOnCompletion(timeMs){
   const data = getStats();
   const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
@@ -753,65 +1047,173 @@ function updateStatsOnCompletion(timeMs){
   renderStreakChip(newStreak, bestTimeMs);
   return { isNewBest };
 }
-
 function showExistingStreak(){
   const data = getStats();
   if (data.lastDate) renderStreakChip(data.streak || 0, data.bestTimeMs);
 }
 
-function showAlreadyCompleted(data){
-  dailyGameCard.innerHTML = `
-    <div class="result">
-      <div class="big">${fmtTime(data.timeMs)}</div>
-      <div class="lbl">Today's time${data.wrongGuesses ? ` &middot; ${data.wrongGuesses} wrong guess${data.wrongGuesses===1?'':'es'}` : ''}</div>
-      <div class="rankline">You've played today's puzzle. Come back after the reset for a new one.</div>
-    </div>`;
-  showRankBadge(dailyRankSlot, gradeFor(data.timeMs));
-  renderCodecStatic(dailyCodecSlot, 'Debrief', debriefLines(dailyPuzzle));
-}
-function showAlreadyGaveUp(){
-  dailyGameCard.innerHTML = `
-    <div class="result">
-      <div class="lbl">Today's puzzle</div>
-      <div class="rankline">You gave up on today's puzzle. Come back after the reset for a new one.</div>
-    </div>`;
-  renderCodecStatic(dailyCodecSlot, 'Debrief', debriefLines(dailyPuzzle));
+function showDailyDone(status){
+  dailyUI.dateEl.textContent = `${MONTH_NAMES[dailyPuzzle.month-1]} ${dailyPuzzle.day}, ${dailyPuzzle.year}`;
+  dailyUI.timerEl.textContent = status.result==='solved' ? fmtTime(status.timeMs) : '--';
+  renderStaticBoard(dailyUI.buttonsEl, dailyPuzzle, status.chosenIdx, status.result);
+  dailyUI.feedbackEl.textContent = "You already played today's puzzle.";
+  dailyUI.giveUpBtn.style.display = 'none';
+  let grade = null;
+  if (status.result==='solved'){ grade = gradeFor(status.timeMs); showRankBadge(dailyRankSlot, grade); }
+  renderResultLine(dailyResultSlot, {result:status.result, timeMs:status.timeMs}, grade, {});
+  const ex = explainLines(dailyPuzzle);
+  const introMap = { solved:"Nice — here's the check:", missed:"Not quite — here's why:", gaveup:"Here's why:" };
+  const box = renderCodecStatic(dailyCodecSlot, status.result==='solved'?'Confirmed':(status.result==='missed'?'Missed':'Debrief'),
+    [{text:ex.headline, cls:'headline'}, {text:introMap[status.result]}, ...ex.simple.map(s=>({text:s}))]);
+  appendMathToggle(box, ex.math);
+  if (status.result==='solved') buildShareCard({result:status.result, timeMs:status.timeMs}, grade);
+  dailyTrainCta.style.display = 'block';
 }
 
-async function handleDailyFinish(result){
-  if (result.gaveUp){
-    await playCodec(dailyCodecSlot, 'Debrief', buildGiveUpLines(dailyPuzzle));
-    setDailyStatus({ status:'gaveUp', completedAt: new Date().toISOString() });
-    return;
+async function handleDailyResult(res){
+  setDailyStatus({ result: res.result, timeMs: res.result==='solved' ? Math.round(res.timeMs) : null, chosenIdx: res.chosenIdx, ts: new Date().toISOString() });
+  let grade = null, perf = {};
+  if (res.result==='solved'){
+    grade = gradeFor(res.timeMs);
+    perf = updateStatsOnCompletion(Math.round(res.timeMs));
+    showRankBadge(dailyRankSlot, grade);
   }
-  setDailyStatus({ status:'completed', timeMs: Math.round(result.timeMs), wrongGuesses: result.wrongGuesses, completedAt: new Date().toISOString() });
-  const perf = updateStatsOnCompletion(Math.round(result.timeMs));
-  showRankBadge(dailyRankSlot, gradeFor(result.timeMs));
-  await playCodec(dailyCodecSlot, 'Confirmed', buildSolvedLines(dailyPuzzle, result, perf));
+  recordRound({ mode:'daily', result:res.result, timeMs:res.timeMs, correctIdx:dailyPuzzle.correctIdx, isTrainingRound:false });
+  renderResultLine(dailyResultSlot, res, grade, perf);
+  await showRoundCodec(dailyCodecSlot, dailyPuzzle, res.result);
+  dailyTrainCta.style.display = 'block';
+  if (res.result==='solved') buildShareCard(res, grade);
 }
 
 function initDaily(){
   const existing = getDailyStatus();
-  if (existing){
-    if (existing.status === 'completed') showAlreadyCompleted(existing);
-    else showAlreadyGaveUp();
-    showExistingStreak();
-    return;
-  }
+  if (existing){ showDailyDone(existing); showExistingStreak(); return; }
   showExistingStreak();
-  runRound(dailyPuzzle, dailyUI, handleDailyFinish);
+  runOneShotRound(dailyPuzzle, dailyUI, handleDailyResult);
 }
+
+/* ---- Share card (canvas) ---- */
+function buildShareCard(res, grade){
+  dailyShareSlot.innerHTML = `<div class="sharecanvas-wrap"><canvas id="shareCanvas" width="600" height="820"></canvas></div>
+    <div class="actionrow">
+      <button class="action primary" id="shareSaveBtn">Save image</button>
+      <button class="action" id="shareCopyBtn">Copy result</button>
+    </div>`;
+  drawShareCanvas(document.getElementById('shareCanvas'), res, grade);
+  document.getElementById('shareSaveBtn').addEventListener('click', () => {
+    const canvas = document.getElementById('shareCanvas');
+    const a = document.createElement('a');
+    a.download = `doomsday-${dateStr}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  });
+  document.getElementById('shareCopyBtn').addEventListener('click', async () => {
+    const text = `Doomsday #${puzzleNumber} -- ${fmtTime(res.timeMs)} -- ${grade.letter} rank (${grade.label})\n${MONTH_NAMES[dailyPuzzle.month-1]} ${dailyPuzzle.day}, ${dailyPuzzle.year} was a ${DAYS[dailyPuzzle.correctIdx]}.`;
+    const btn = document.getElementById('shareCopyBtn');
+    try { await navigator.clipboard.writeText(text); const old=btn.textContent; btn.textContent='Copied!'; setTimeout(()=>btn.textContent=old,1400); }
+    catch(e){ const old=btn.textContent; btn.textContent='Copy failed'; setTimeout(()=>btn.textContent=old,1400); }
+  });
+}
+async function drawShareCanvas(canvas, res, grade){
+  try { await document.fonts.ready; } catch(e){}
+  const ctx = canvas.getContext('2d');
+  const cs = getComputedStyle(document.documentElement);
+  const gv = (name, fb) => (cs.getPropertyValue(name) || fb).trim();
+  const paper = gv('--panel', '#F5F1E4'), pageBg = gv('--bg', '#DCD3B8'), text = gv('--text', '#211C13'),
+        borderStrong = gv('--border-strong', '#8D8264'), muted = gv('--muted', '#6E624A');
+  const gradeColorMap = { S: gv('--gold','#B4790E'), A: gv('--accent2','#8A2BB0'), B: gv('--accent','#1E3FA0'), C: muted, D: gv('--danger','#D93A1F') };
+  const ink = gradeColorMap[grade ? grade.letter : 'C'] || text;
+  const postmarkInk = '#7A2E22';
+  const puzzle = dailyPuzzle;
+  const W = canvas.width, H = canvas.height;
+  const circ = (x,y,r) => { ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); };
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = pageBg; ctx.fillRect(0,0,W,H);
+
+  const sw=440, sh=620, sx=(W-sw)/2, sy=(H-sh)/2 - 14;
+  ctx.fillStyle = paper; ctx.fillRect(sx,sy,sw,sh);
+  ctx.strokeStyle = borderStrong; ctx.lineWidth = 2; ctx.strokeRect(sx,sy,sw,sh);
+
+  ctx.fillStyle = pageBg;
+  const notchR=7, topCount=8, sideCount=11;
+  for (let i=0;i<topCount;i++){ const x=sx+sw*((i+0.5)/topCount); circ(x,sy,notchR); circ(x,sy+sh,notchR); }
+  for (let i=0;i<sideCount;i++){ const y=sy+sh*((i+0.5)/sideCount); circ(sx,y,notchR); circ(sx+sw,y,notchR); }
+
+  ctx.strokeStyle = ink; ctx.lineWidth = 1.5; ctx.strokeRect(sx+14, sy+14, sw-28, sh-28);
+
+  ctx.fillStyle = ink; ctx.font = "700 15px 'Space Mono'"; ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  ctx.fillText('D O O M S D A Y   P O S T', sx+sw/2, sy+46);
+
+  const cx=sx+sw/2, cy=sy+206, r=94;
+  ctx.strokeStyle = ink; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+  const labels = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  for (let i=0;i<7;i++){
+    const ang = (-90 + i*(360/7)) * Math.PI/180;
+    const dotx=cx+Math.cos(ang)*r, doty=cy+Math.sin(ang)*r;
+    ctx.fillStyle = ink; circ(dotx,doty,3);
+    const tx=cx+Math.cos(ang)*(r+27), ty=cy+Math.sin(ang)*(r+27);
+    const isAns = i===puzzle.correctIdx;
+    ctx.font = (isAns?'800 15px ':'700 12px ')+"'Space Mono'";
+    ctx.fillStyle = isAns ? text : ink;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(labels[i], tx, ty);
+  }
+  const pang = (-90 + puzzle.correctIdx*(360/7)) * Math.PI/180;
+  const px=cx+Math.cos(pang)*(r-10), py=cy+Math.sin(pang)*(r-10);
+  ctx.strokeStyle = text; ctx.lineWidth = 5; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(px,py); ctx.stroke();
+  ctx.fillStyle = text; circ(cx,cy,5);
+  ctx.font = "600 11px 'Space Mono'"; ctx.fillStyle = muted; ctx.textAlign='center';
+  ctx.fillText(String(puzzle.year), cx, cy+30);
+
+  ctx.fillStyle = text; ctx.font = "900 34px 'Big Shoulders Display'"; ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  ctx.fillText(`${MONTH_NAMES[puzzle.month-1].slice(0,3).toUpperCase()} ${puzzle.day}`, cx, sy+358);
+  ctx.font = "700 12px 'Space Mono'"; ctx.fillStyle = ink;
+  ctx.fillText(`${DAYS[puzzle.correctIdx].toUpperCase()} \u00B7 ${puzzle.year} \u00B7 #${puzzleNumber}`, cx, sy+380);
+
+  ctx.textAlign='left';
+  ctx.font = "900 40px 'Big Shoulders Display'"; ctx.fillStyle = text;
+  const timeLabel = res.result==='solved' ? fmtTime(res.timeMs) : (res.result==='missed' ? 'MISS' : 'N/A');
+  ctx.fillText(timeLabel, sx+30, sy+sh-58);
+  ctx.font = "600 10px 'Space Mono'"; ctx.fillStyle = muted;
+  ctx.fillText(res.result==='solved' ? 'SOLVE TIME' : 'RESULT', sx+30, sy+sh-40);
+
+  if (grade){
+    ctx.strokeStyle = ink; ctx.lineWidth = 2;
+    const bw=70, bh=64, bx=sx+sw-30-bw, by=sy+sh-30-bh;
+    ctx.strokeRect(bx,by,bw,bh);
+    ctx.fillStyle = ink; ctx.textAlign='center'; ctx.font = "900 34px 'Big Shoulders Display'";
+    ctx.fillText(grade.letter, bx+bw/2, by+42);
+    ctx.font = "600 9px 'Space Mono'";
+    ctx.fillText('RANK', bx+bw/2, by+56);
+  }
+
+  ctx.save();
+  ctx.translate(sx+sw-28, sy+28);
+  ctx.rotate(-12*Math.PI/180);
+  ctx.globalAlpha = 0.85;
+  try { ctx.globalCompositeOperation = 'multiply'; } catch(e){}
+  ctx.strokeStyle = postmarkInk; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.arc(0,0,72,0,Math.PI*2); ctx.stroke();
+  ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0,0,62,0,Math.PI*2); ctx.stroke();
+  ctx.fillStyle = postmarkInk; ctx.textAlign='center';
+  ctx.font = "700 12px 'Space Mono'"; ctx.fillText(res.result==='solved'?'SOLVED':(res.result==='missed'?'MISSED':'PASSED'), 0, -14);
+  ctx.font = "800 17px 'Big Shoulders Display'"; ctx.fillText(`${MONTH_NAMES[puzzle.month-1].slice(0,3).toUpperCase()} ${puzzle.day}`, 0, 6);
+  ctx.font = "600 8px 'Space Mono'"; ctx.fillText('DOOMSDAY GAME', 0, 24);
+  ctx.restore();
+}
+
 initDaily();
 
 /* ================= TRAINING ================= */
 const TR_KEY = 'doomsday-training-stats';
-let tr = { score:0, streak:0, best:0, times:[], bestTimeMs:null };
-try { const saved = JSON.parse(localStorage.getItem(TR_KEY) || 'null'); if (saved) tr = Object.assign(tr, saved); } catch(e){}
+let tr = { score:0, streak:0, best:0, times:[] };
+try { const saved = readJSON(TR_KEY, null); if (saved) tr = Object.assign(tr, saved); } catch(e){}
 
 const trUI = {
   dateEl: document.getElementById('trPuzzleDate'),
   timerEl: document.getElementById('trTimer'),
-  penaltyEl: document.getElementById('trPenalty'),
   buttonsEl: document.getElementById('trButtons'),
   feedbackEl: document.getElementById('trFeedback'),
   giveUpBtn: document.getElementById('trGiveUp'),
@@ -824,6 +1226,10 @@ const trAvgEl = document.getElementById('trAvg');
 const trCodecSlot = document.getElementById('trCodecSlot');
 const trRankSlot = document.getElementById('trRankSlot');
 const trNextBtn = document.getElementById('trNextBtn');
+const trActionRow = document.getElementById('trActionRow');
+const trPracticeStats = document.getElementById('trPracticeStats');
+const modeStatusEl = document.getElementById('modeStatus');
+const streakDotsEl = document.getElementById('streakDots');
 
 function renderTrStats(){
   trScoreEl.textContent = tr.score;
@@ -831,34 +1237,121 @@ function renderTrStats(){
   trBestEl.textContent = tr.best;
   trAvgEl.textContent = tr.times.length ? (tr.times.reduce((a,b)=>a+b,0)/tr.times.length/1000).toFixed(1)+'s' : '\u2014';
   trStreakStat.classList.toggle('hot', tr.streak >= 3);
-  try { localStorage.setItem(TR_KEY, JSON.stringify(tr)); } catch(e){}
+  writeJSON(TR_KEY, tr);
 }
 renderTrStats();
 
-function newTrainingRound(){
-  trCodecSlot.innerHTML = ''; clearRankBadge(trRankSlot);
-  const puzzle = randomPuzzle(Math.random);
-  runRound(puzzle, trUI, async (result) => {
-    if (result.gaveUp){
-      tr.streak = 0; renderTrStats();
-      await playCodec(trCodecSlot, 'Debrief', buildGiveUpLines(puzzle));
-    } else {
-      let perf = {};
-      if (tr.times.length >= 3){
-        const avg = tr.times.reduce((a,b)=>a+b,0) / tr.times.length;
-        perf.delta = result.timeMs - avg;
-      }
-      if (!tr.bestTimeMs || result.timeMs < tr.bestTimeMs){ perf.isNewBest = true; tr.bestTimeMs = result.timeMs; }
-      tr.score += 1; tr.streak += 1; tr.best = Math.max(tr.best, tr.streak);
-      tr.times.push(result.timeMs); if (tr.times.length > 20) tr.times.shift();
-      renderTrStats();
-      showRankBadge(trRankSlot, gradeFor(result.timeMs));
-      await playCodec(trCodecSlot, 'Confirmed', buildSolvedLines(puzzle, result, perf));
-    }
-  });
+let currentMode = 'practice';
+let streakResults = [];
+let blitzTimer = null, blitzEndAt = 0, blitzSolved = 0, blitzMissed = 0;
+let survivalCount = 0, survivalBest = readJSON('doomsday-survival-best', 0);
+
+function renderStreakDots(){
+  streakDotsEl.innerHTML = Array.from({length:10}).map((_, i) => {
+    let cls = '';
+    if (i < streakResults.length) cls = streakResults[i]==='solved' ? 'done' : 'fail';
+    return `<span class="${cls}"></span>`;
+  }).join('');
 }
-trNextBtn.addEventListener('click', newTrainingRound);
-newTrainingRound();
+function updateModeStatus(){
+  if (currentMode==='blitz'){
+    const remain = Math.max(0, Math.ceil((blitzEndAt-Date.now())/1000));
+    modeStatusEl.innerHTML = `<span>Time left: <b>${remain}s</b></span><span>Solved: <b>${blitzSolved}</b></span>`;
+  } else if (currentMode==='survival'){
+    modeStatusEl.innerHTML = `<span>Run: <b>${survivalCount}</b></span><span>Best: <b>${survivalBest}</b></span>`;
+  }
+}
+function appendModeEnd(slotEl, text){
+  const div = document.createElement('div');
+  div.className = 'modeend';
+  div.innerHTML = `<div class="big">${text}</div>`;
+  slotEl.appendChild(div);
+  const btn = document.createElement('button');
+  btn.className = 'action primary'; btn.style.marginTop = '10px'; btn.style.width = '100%';
+  btn.textContent = 'Run it back';
+  btn.addEventListener('click', () => setMode(currentMode));
+  slotEl.appendChild(btn);
+}
+function endBlitz(){
+  clearInterval(blitzTimer); blitzTimer = null;
+  appendModeEnd(trCodecSlot, `Time's up — ${blitzSolved} solved, ${blitzMissed} missed in 60s.`);
+}
+
+function startTrainingRound(){
+  trCodecSlot.innerHTML = ''; clearRankBadge(trRankSlot);
+  if (currentMode==='blitz' && !blitzTimer){
+    blitzEndAt = Date.now() + 60000;
+    blitzTimer = setInterval(() => { updateModeStatus(); if (Date.now() >= blitzEndAt) endBlitz(); }, 200);
+  }
+  updateModeStatus();
+  const puzzle = randomPuzzle(Math.random);
+  runOneShotRound(puzzle, trUI, (res) => handleTrainingResult(res, puzzle));
+}
+
+function handleTrainingResult(res, puzzle){
+  recordRound({ mode:'training-'+currentMode, result:res.result, timeMs:res.timeMs, correctIdx:puzzle.correctIdx, isTrainingRound:true });
+  let grade = null;
+  if (res.result==='solved'){ grade = gradeFor(res.timeMs); showRankBadge(trRankSlot, grade); }
+
+  if (currentMode==='practice'){
+    if (res.result==='solved'){ tr.score+=1; tr.streak+=1; tr.best=Math.max(tr.best,tr.streak); tr.times.push(res.timeMs); if (tr.times.length>20) tr.times.shift(); }
+    else { tr.streak = 0; }
+    renderTrStats();
+    showRoundCodec(trCodecSlot, puzzle, res.result);
+    return;
+  }
+
+  if (currentMode==='streak10'){
+    streakResults.push(res.result); renderStreakDots();
+    if (res.result!=='solved'){
+      showRoundCodec(trCodecSlot, puzzle, res.result).then(() => appendModeEnd(trCodecSlot, `Streak run ended — ${streakResults.filter(r=>r==='solved').length}/10 solved.`));
+      return;
+    }
+    if (streakResults.length>=10){
+      showRoundCodec(trCodecSlot, puzzle, res.result).then(() => appendModeEnd(trCodecSlot, `Perfect 10! Nice work.`));
+      return;
+    }
+    showRoundCodec(trCodecSlot, puzzle, res.result).then(() => setTimeout(startTrainingRound, 550));
+    return;
+  }
+
+  if (currentMode==='blitz'){
+    if (res.result==='solved') blitzSolved+=1; else blitzMissed+=1;
+    updateModeStatus();
+    if (Date.now() >= blitzEndAt){ endBlitz(); return; }
+    trCodecSlot.innerHTML = `<div class="codec"><div class="codec-head"><span class="codec-dot"></span><span>${res.result==='solved'?'Hit':'Miss'}</span></div><div class="codec-body"><div class="codec-line">${res.result==='solved' ? ('+1 -- '+DAYS[puzzle.correctIdx]) : ('missed -- it was '+DAYS[puzzle.correctIdx])}</div></div></div>`;
+    setTimeout(() => { if (currentMode==='blitz' && Date.now() < blitzEndAt) startTrainingRound(); }, 260);
+    return;
+  }
+
+  if (currentMode==='survival'){
+    if (res.result==='solved'){
+      survivalCount+=1; updateModeStatus();
+      showRoundCodec(trCodecSlot, puzzle, res.result).then(() => setTimeout(startTrainingRound, 550));
+    } else {
+      if (survivalCount > survivalBest){ survivalBest = survivalCount; writeJSON('doomsday-survival-best', survivalBest); }
+      showRoundCodec(trCodecSlot, puzzle, res.result).then(() => { appendModeEnd(trCodecSlot, `Run ended at ${survivalCount}. Best: ${survivalBest}.`); updateModeStatus(); });
+    }
+    return;
+  }
+}
+
+function setMode(mode){
+  currentMode = mode;
+  document.querySelectorAll('.modebtn').forEach(b => b.classList.toggle('active', b.dataset.mode===mode));
+  trPracticeStats.style.display = mode==='practice' ? 'flex' : 'none';
+  modeStatusEl.style.display = (mode==='blitz'||mode==='survival') ? 'flex' : 'none';
+  streakDotsEl.style.display = mode==='streak10' ? 'flex' : 'none';
+  trActionRow.style.display = mode==='practice' ? 'flex' : 'none';
+  clearInterval(blitzTimer); blitzTimer = null;
+  if (mode==='streak10'){ streakResults = []; renderStreakDots(); }
+  if (mode==='survival') survivalCount = 0;
+  if (mode==='blitz'){ blitzSolved = 0; blitzMissed = 0; }
+  startTrainingRound();
+}
+document.querySelectorAll('.modebtn').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+trNextBtn.addEventListener('click', startTrainingRound);
+setMode('practice');
 
 /* ================= HOW 2 ================= */
 const now = new Date();
@@ -876,53 +1369,35 @@ const exMonthName = MONTH_NAMES[exDate.month-1];
 const exResultIdx = dayOfWeek(exDate.year, exDate.month, exDate.day);
 
 const CENTURY_ROWS = [
-  {label:'1600s / 2000s', idx:2},
-  {label:'1700s / 2100s', idx:0},
-  {label:'1800s / 2200s', idx:5},
-  {label:'1900s / 2300s', idx:3},
+  {label:'1600s / 2000s', idx:2}, {label:'1700s / 2100s', idx:0},
+  {label:'1800s / 2200s', idx:5}, {label:'1900s / 2300s', idx:3},
 ];
-const centuryTableEl = document.getElementById('centuryTable');
-centuryTableEl.innerHTML = CENTURY_ROWS.map(r =>
+document.getElementById('centuryTable').innerHTML = CENTURY_ROWS.map(r =>
   `<tr class="${r.idx===exAnchor?'hl':''}"><td>${r.label}</td><td>${DAYS[r.idx]}</td></tr>`
 ).join('');
 
 const STEPS = [
-  {
-    eyebrow: 'The big idea',
-    title: 'Every date has exactly one weekday',
-    body: `<p>The doomsday method finds it in your head, no calendar needed. It works in four short steps, and each one leans on a fixed reference point you look up or already know.</p>
-           <p>We'll walk through it using a real example: <b>${exMonthName} ${exDate.day}, ${exDate.year}</b> — today.</p>`
-  },
-  {
-    eyebrow: 'Step 1 of 4',
-    title: "Start with the century",
-    body: `<p>Every 100-year block has one fixed weekday, called its anchor. It repeats every 400 years, so there are only four to remember.</p>
-           <table class="mini-table">${CENTURY_ROWS.map(r => `<tr class="${r.idx===exAnchor?'hl':''}"><td>${r.label}</td><td>${DAYS[r.idx]}</td></tr>`).join('')}</table>
-           <p>${exDate.year} is in the <b>${exCentury}00s</b>, so the anchor is <b>${DAYS[exAnchor]}</b>.</p>`
-  },
-  {
-    eyebrow: 'Step 2 of 4',
-    title: "Find the year's doomsday",
-    body: `<p>Take the last two digits of the year — for ${exDate.year}, that's <b>${exYY}</b> — and run one small calculation:</p>
-           <div class="calc-line">a = ${exYY} / 12, rounded down = ${exA}</div>
-           <div class="calc-line">b = ${exYY} mod 12 = ${exB}</div>
-           <div class="calc-line">c = ${exB} / 4, rounded down = ${exC}</div>
-           <div class="calc-line">a + b + c + anchor = ${exA}+${exB}+${exC}+${exAnchor} = ${exSum} &rarr; mod 7 = ${exDD}</div>
-           <p>That lands on <b>${DAYS[exDD]}</b> — every date sharing that weekday this year is on "doomsday."</p>`
-  },
-  {
-    eyebrow: 'Step 3 of 4',
-    title: 'Use a date you already know',
-    body: `<p>Certain dates land on doomsday every single year. A few are easy to remember: <b>4/4, 6/6, 8/8, 10/10, 12/12</b>, and <b>7/11</b>.</p>
-           <p>For ${exMonthName}, that date is <b>${exMonthName} ${exAnchorDate}</b> — so it's a <b>${DAYS[exDD]}</b> this year too.</p>`
-  },
-  {
-    eyebrow: 'Step 4 of 4',
-    title: 'Count to your date',
-    body: `<p>From ${exMonthName} ${exAnchorDate}, count to ${exMonthName} ${exDate.day}: that's <b>${exDiffAbs} day${exDiffAbs===1?'':'s'}</b> ${exDiff>=0?'later':'earlier'}.</p>
-           <div class="calc-line">${exDD} ${exDiff>=0?'+':'-'} ${exDiffAbs} mod 7 = ${exResultIdx}</div>
-           <p>${exMonthName} ${exDate.day}, ${exDate.year} is a <b>${DAYS[exResultIdx]}</b>. That's the whole method — try it below with a fresh date.</p>`
-  },
+  { eyebrow:'The big idea', title:'Every date has exactly one weekday',
+    body:`<p>The doomsday method finds it in your head, no calendar needed. It works in four short steps, and each one leans on a fixed reference point you look up or already know.</p>
+          <p>We'll walk through it using a real example: <b>${exMonthName} ${exDate.day}, ${exDate.year}</b> — today.</p>` },
+  { eyebrow:'Step 1 of 4', title:'Start with the century',
+    body:`<p>Every 100-year block has one fixed weekday, called its anchor. It repeats every 400 years, so there are only four to remember.</p>
+          <table class="mini-table">${CENTURY_ROWS.map(r => `<tr class="${r.idx===exAnchor?'hl':''}"><td>${r.label}</td><td>${DAYS[r.idx]}</td></tr>`).join('')}</table>
+          <p>${exDate.year} is in the <b>${exCentury}00s</b>, so the anchor is <b>${DAYS[exAnchor]}</b>.</p>` },
+  { eyebrow:'Step 2 of 4', title:"Find the year's doomsday",
+    body:`<p>Take the last two digits of the year — for ${exDate.year}, that's <b>${exYY}</b> — and run one small calculation:</p>
+          <div class="calc-line">a = ${exYY} / 12, rounded down = ${exA}</div>
+          <div class="calc-line">b = ${exYY} mod 12 = ${exB}</div>
+          <div class="calc-line">c = ${exB} / 4, rounded down = ${exC}</div>
+          <div class="calc-line">a + b + c + anchor = ${exA}+${exB}+${exC}+${exAnchor} = ${exSum} &rarr; mod 7 = ${exDD}</div>
+          <p>That lands on <b>${DAYS[exDD]}</b> — every date sharing that weekday this year is on "doomsday."</p>` },
+  { eyebrow:'Step 3 of 4', title:'Use a date you already know',
+    body:`<p>Certain dates land on doomsday every single year. A few are easy to remember: <b>4/4, 6/6, 8/8, 10/10, 12/12</b>, and <b>7/11</b>.</p>
+          <p>For ${exMonthName}, that date is <b>${exMonthName} ${exAnchorDate}</b> — so it's a <b>${DAYS[exDD]}</b> this year too.</p>` },
+  { eyebrow:'Step 4 of 4', title:'Count to your date',
+    body:`<p>From ${exMonthName} ${exAnchorDate}, count to ${exMonthName} ${exDate.day}: that's <b>${exDiffAbs} day${exDiffAbs===1?'':'s'}</b> ${exDiff>=0?'later':'earlier'}.</p>
+          <div class="calc-line">${exDD} ${exDiff>=0?'+':'-'} ${exDiffAbs} mod 7 = ${exResultIdx}</div>
+          <p>${exMonthName} ${exDate.day}, ${exDate.year} is a <b>${DAYS[exResultIdx]}</b>. That's the whole method — try it below with a fresh date. Every round is one tap, right or wrong.</p>` },
 ];
 
 let stepIdx = 0;
@@ -932,51 +1407,97 @@ const stepTitle = document.getElementById('stepTitle');
 const stepBody = document.getElementById('stepBody');
 const stepPrev = document.getElementById('stepPrev');
 const stepNext = document.getElementById('stepNext');
-
 STEPS.forEach((_, i) => { const d = document.createElement('span'); d.dataset.i = i; stepDots.appendChild(d); });
-
 function renderStep(){
   const s = STEPS[stepIdx];
-  stepEyebrow.textContent = s.eyebrow;
-  stepTitle.textContent = s.title;
-  stepBody.innerHTML = s.body;
+  stepEyebrow.textContent = s.eyebrow; stepTitle.textContent = s.title; stepBody.innerHTML = s.body;
   [...stepDots.children].forEach((d, i) => d.classList.toggle('on', i === stepIdx));
   stepPrev.disabled = stepIdx === 0;
   stepNext.textContent = stepIdx === STEPS.length - 1 ? 'Start over' : 'Next';
 }
 stepPrev.addEventListener('click', () => { if (stepIdx > 0){ stepIdx--; renderStep(); } });
-stepNext.addEventListener('click', () => {
-  if (stepIdx === STEPS.length - 1){ stepIdx = 0; } else { stepIdx++; }
-  renderStep();
-});
+stepNext.addEventListener('click', () => { stepIdx = (stepIdx === STEPS.length - 1) ? 0 : stepIdx + 1; renderStep(); });
 renderStep();
 
 const hwUI = {
   dateEl: document.getElementById('hwPuzzleDate'),
   timerEl: document.getElementById('hwTimer'),
-  penaltyEl: document.getElementById('hwPenalty'),
   buttonsEl: document.getElementById('hwButtons'),
   feedbackEl: document.getElementById('hwFeedback'),
   giveUpBtn: document.getElementById('hwGiveUp'),
 };
 const hwCodecSlot = document.getElementById('hwCodecSlot');
 const hwRankSlot = document.getElementById('hwRankSlot');
-const hwNextBtn = document.getElementById('hwNextBtn');
-
+document.getElementById('hwNextBtn').addEventListener('click', newHowtoRound);
 function newHowtoRound(){
   hwCodecSlot.innerHTML = ''; clearRankBadge(hwRankSlot);
   const puzzle = randomPuzzle(Math.random);
-  runRound(puzzle, hwUI, async (result) => {
-    if (result.gaveUp){
-      await playCodec(hwCodecSlot, 'Debrief', buildGiveUpLines(puzzle));
-    } else {
-      showRankBadge(hwRankSlot, gradeFor(result.timeMs));
-      await playCodec(hwCodecSlot, 'Confirmed', buildSolvedLines(puzzle, result, {}));
-    }
+  runOneShotRound(puzzle, hwUI, (res) => {
+    recordRound({ mode:'howto', result:res.result, timeMs:res.timeMs, correctIdx:puzzle.correctIdx, isTrainingRound:false });
+    if (res.result==='solved') showRankBadge(hwRankSlot, gradeFor(res.timeMs));
+    showRoundCodec(hwCodecSlot, puzzle, res.result);
   });
 }
-hwNextBtn.addEventListener('click', newHowtoRound);
 newHowtoRound();
+
+/* ================= STATS ================= */
+function renderStatsPanel(){
+  const hist = readJSON('doomsday-history', []);
+  const solved = hist.filter(h => h.result==='solved');
+  const missed = hist.filter(h => h.result==='missed');
+  const total = hist.length;
+  const acc = (solved.length + missed.length) > 0 ? Math.round(solved.length/(solved.length+missed.length)*100) : null;
+  const avg = solved.length ? solved.reduce((a,h)=>a+h.timeMs,0)/solved.length : null;
+  const srankCount = solved.filter(h => h.grade==='S').length;
+
+  document.getElementById('stTotal').textContent = total;
+  document.getElementById('stAcc').textContent = acc===null ? '\u2014' : acc+'%';
+  document.getElementById('stAvg').textContent = avg===null ? '\u2014' : fmtTime(avg);
+  document.getElementById('stSrank').textContent = srankCount;
+
+  const dstats = getStats();
+  document.getElementById('stCurStreak').textContent = (dstats.streak || 0) + ' days';
+  document.getElementById('stBestStreak').textContent = (dstats.bestStreak || 0) + ' days';
+  document.getElementById('stBestTime').textContent = dstats.bestTimeMs ? fmtTime(dstats.bestTimeMs) : '\u2014';
+
+  renderHeatmap(hist);
+}
+function renderHeatmap(hist){
+  const n = new Date();
+  const y = n.getFullYear(), m = n.getMonth();
+  const daysInM = new Date(y, m+1, 0).getDate();
+  const firstDow = new Date(y, m, 1).getDay();
+  document.getElementById('heatSub').textContent = `${MONTH_NAMES[m]} ${y} \u2014 daily puzzle only.`;
+  const byDate = {};
+  hist.filter(h => h.mode==='daily').forEach(h => { byDate[h.dateKey] = h; });
+  const grid = document.getElementById('heatGrid');
+  grid.innerHTML = '';
+  for (let i=0;i<firstDow;i++) grid.appendChild(document.createElement('div'));
+  for (let d=1; d<=daysInM; d++){
+    const key = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const rec = byDate[key];
+    const cell = document.createElement('div'); cell.className = 'cell'; cell.textContent = d;
+    if (rec){
+      if (rec.result==='solved'){ const g=(rec.grade||'C').toLowerCase(); cell.classList.add(g==='s'?'s':g==='a'?'a':g==='b'?'b':'c'); }
+      else cell.classList.add('miss');
+    }
+    grid.appendChild(cell);
+  }
+}
+
+/* ================= ACHIEVEMENTS ================= */
+function renderAchievementsPanel(){
+  const unlocked = getUnlocked();
+  const list = document.getElementById('achvList');
+  document.getElementById('achvProgress').textContent = `${Object.keys(unlocked).length} / ${ACHIEVEMENTS.length} unlocked`;
+  list.innerHTML = ACHIEVEMENTS.map(a => {
+    const u = unlocked[a.id];
+    return `<div class="achv ${u?'unlocked':'locked'}">
+      <div class="achv-badge">${u?'\u2713':'?'}</div>
+      <div><div class="achv-title">${a.title}</div><div class="achv-desc">${a.desc}</div>${u?`<div class="achv-date">Unlocked ${new Date(u).toLocaleDateString()}</div>`:''}</div>
+    </div>`;
+  }).join('');
+}
 
 })();
 </script>
