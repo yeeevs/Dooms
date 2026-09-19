@@ -126,7 +126,14 @@
   .boot-month{font-family:var(--font-mono); letter-spacing:.18em; color:var(--danger); font-weight:700; font-size:.9rem;}
   .boot-day{font-family:var(--font-display); font-weight:900; font-size:5.2rem; line-height:1; color:var(--text); transform-style:preserve-3d;}
   .boot-dow{font-family:var(--font-mono); color:var(--muted); font-size:.78rem; letter-spacing:.12em; margin-top:6px;}
-  .boot-hint{font-family:var(--font-mono); font-size:.68rem; color:var(--muted); opacity:.65; letter-spacing:.05em;}
+  .boot-byline{font-family:var(--font-mono); font-size:.66rem; color:var(--muted); letter-spacing:.05em; margin:0;}
+  #bootWordmark{margin-bottom:6px;}
+  @keyframes dropIn{
+    0%{transform:translateY(-50px) rotate(var(--tilt,0deg)); opacity:0;}
+    100%{transform:translateY(0) rotate(var(--tilt,0deg)); opacity:1;}
+  }
+  #bootWordmark span{animation:dropIn .7s cubic-bezier(.34,1.56,.64,1) both;}
+  @media (prefers-reduced-motion:reduce){ #bootWordmark span{animation:none; opacity:1;} }
   @media (prefers-reduced-motion:reduce){ .boot-overlay{transition:none;} }
 
   .panel{display:none;}
@@ -215,15 +222,19 @@
   .distline{font-family:var(--font-mono); font-size:.72rem; color:var(--muted); margin-top:6px;}
 
   @keyframes shineSweep{
-    0%{transform:translateX(-160%) skewX(-20deg); opacity:0;}
-    10%{opacity:1;} 45%{opacity:1;}
-    62%{transform:translateX(220%) skewX(-20deg); opacity:0;}
-    100%{transform:translateX(220%) skewX(-20deg); opacity:0;}
+    0%{background-position:-140% -140%; opacity:0;}
+    18%{opacity:1;} 78%{opacity:1;}
+    100%{background-position:140% 140%; opacity:0;}
   }
   .shine{position:relative; overflow:hidden;}
-  .shine::after{content:''; position:absolute; top:-15%; left:0; width:38%; height:130%; background:linear-gradient(115deg, transparent 0%, rgba(255,255,255,.75) 45%, rgba(255,255,255,.2) 58%, transparent 100%); pointer-events:none; mix-blend-mode:overlay;}
+  .shine::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background-image:linear-gradient(115deg, transparent 32%, rgba(255,255,255,.8) 48%, rgba(255,255,255,.8) 52%, transparent 68%);
+    background-size:260% 260%; background-position:-140% -140%;
+    mix-blend-mode:soft-light; opacity:0;
+  }
   .wordmark span.shine::after{animation:shineSweep 6.5s ease-in-out infinite; animation-delay:var(--shine-delay,0s);}
-  .rankpill.shine::after, .daybtns button.correct.shine::after, .daybtns button.answer.shine::after{animation:shineSweep 1.05s ease-out 1; animation-delay:.16s; animation-fill-mode:backwards;}
+  .rankpill.shine::after, .daybtns button.correct.shine::after, .daybtns button.answer.shine::after{animation:shineSweep 2.6s ease-in-out infinite; animation-delay:.16s;}
   @media (prefers-reduced-motion:reduce){ .shine::after{animation:none !important; content:none;} }
 
   /* S-rank: go big */
@@ -292,20 +303,30 @@
 
   /* Share */
   .sharecanvas-wrap{display:flex; justify-content:center; margin-bottom:14px;}
-  .sharecanvas-wrap canvas{max-width:100%; height:auto; border:1.5px solid var(--text); box-shadow:5px 5px 0 0 var(--border-strong);}
+  .sharecard-inner{position:relative; display:inline-block; overflow:hidden; border:1.5px solid var(--text); box-shadow:5px 5px 0 0 var(--border-strong); line-height:0;}
+  .sharecard-inner img{display:block; max-width:100%; height:auto;}
+  .sharecard-inner.shine::after{animation:shineSweep 5s ease-in-out infinite;}
+  .shine-spot{position:absolute; pointer-events:none;}
+  .shine-spot.shine::after{animation:shineSweep 2.6s ease-in-out infinite;}
+  .shine-spot.rank{left:67%; top:71%; width:16%; height:10%;}
+  .shine-spot.rank.shine::after{animation-delay:.6s;}
+  .shine-spot.postmark{left:69%; top:3%; width:25%; height:19%; border-radius:50%;}
+  .shine-spot.postmark.shine::after{animation-delay:1.8s; animation-duration:3.4s;}
+  .sharehint{text-align:center; font-family:var(--font-mono); font-size:.72rem; color:var(--muted); margin:2px 0 14px;}
 </style>
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
 
 <div id="bootOverlay" class="boot-overlay">
+  <div class="wordmark" id="bootWordmark"></div>
+  <p class="boot-byline">A Game by Kevin Serrano</p>
   <div class="boot-card">
     <div class="boot-rings"><span></span><span></span><span></span><span></span></div>
     <div class="boot-month" id="bootMonth">JAN</div>
     <div class="boot-day" id="bootDay">01</div>
     <div class="boot-dow" id="bootDow">MONDAY</div>
   </div>
-  <p class="boot-hint">tap to skip</p>
 </div>
 
 <div class="menu-backdrop" id="menuBackdrop"></div>
@@ -332,7 +353,6 @@
     </button>
   </div>
   <div class="togglerow"><span>Sound</span><div class="switch" id="soundSwitch"></div></div>
-  <div class="togglerow"><span>Haptics (where supported)</span><div class="switch" id="hapticSwitch"></div></div>
   <p class="drawer-footer">A game by Kevin Serrano &middot; v1.5</p>
 </nav>
 
@@ -365,7 +385,6 @@
   </header>
 
   <div class="masthead">
-    <span id="mastheadLeft">Vol. 1</span>
     <b id="mastheadLabel">Daily Edition</b>
     <span id="mastheadRight">No. 1</span>
   </div>
@@ -566,16 +585,22 @@ function explainLines(puzzle){
   const {year, month, day, correctIdx} = puzzle;
   const monthName=MONTH_NAMES[month-1];
   const century=Math.floor(year/100), yy=year%100, anchor=centuryAnchor(century);
-  const a=Math.floor(yy/12), b=yy%12, c=Math.floor(b/4), sum=a+b+c, dd=(sum+anchor)%7;
+  const a=Math.floor(yy/12), b=yy%12, c=Math.floor(b/4), ab=a+b, sum=ab+c, dd=(sum+anchor)%7;
   const anchorDate=doomsdayAnchorDate(year, month);
   const diff=day-anchorDate, diffAbs=Math.abs(diff);
   const simple = [
-    `${yy} \u00F7 12 goes in ${a} time${a===1?'':'s'}, remainder ${b}.`,
-    `${a} + ${b}, plus ${b} \u00F7 4 (goes in ${c} time${c===1?'':'s'}) &mdash; that's ${sum} days past the century's anchor (${DAYS[anchor]}).`,
-    `Land on ${DAYS[dd]} &mdash; ${year}'s anchor weekday. ${monthName} ${anchorDate} always falls on it too.`,
+    `Take the last two digits of ${year}: ${yy}.`,
+    `${yy} \u00F7 12 goes in ${a} time${a===1?'':'s'}, with ${b} left over.`,
+    `Add those together: ${a} + ${b} = ${ab}.`,
+    b>0
+      ? `Now divide that remainder, ${b}, by 4: it goes in ${c} time${c===1?'':'s'}.`
+      : `There's no remainder here, so this step is just 0.`,
+    `Add that in too: ${ab} + ${c} = ${sum}. That's how many days you land past the century's anchor.`,
+    `The century's anchor is ${DAYS[anchor]}. Count ${sum} day${sum===1?'':'s'} forward from there -- you land on ${DAYS[dd]}. That's ${year}'s anchor weekday.`,
+    `${monthName} ${anchorDate} always falls on the year's anchor, so it's a ${DAYS[dd]} too.`,
     diffAbs===0
       ? `${monthName} ${day} is that exact date.`
-      : `Count ${diffAbs} day${diffAbs===1?'':'s'} ${diff>0?'forward':'back'} to ${monthName} ${day} -- landing on ${DAYS[correctIdx]}.`
+      : `Count ${diffAbs} day${diffAbs===1?'':'s'} ${diff>0?'forward':'back'} from there to ${monthName} ${day} -- landing on ${DAYS[correctIdx]}.`
   ];
   const math = [
     `Century ${century}00 -&gt; anchor index ${anchor} (${DAYS[anchor]}).`,
@@ -586,38 +611,41 @@ function explainLines(puzzle){
   return { headline: `${monthName} ${day}, ${year} is a ${DAYS[correctIdx]}.`, simple, math };
 }
 
-/* ---------- Sound (synthesized, off by default) + haptics ---------- */
+/* ---------- Sound (synthesized, off by default) ---------- */
 let audioCtx = null;
-function ensureAudio(){ if(!audioCtx){ try { audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} } return audioCtx; }
+function ensureAudio(){
+  if (!audioCtx){ try { audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} }
+  if (audioCtx && audioCtx.state==='suspended'){ audioCtx.resume().catch(()=>{}); }
+  return audioCtx;
+}
 function soundOn(){ return readJSON('doomsday-sound', {on:false}).on; }
-function hapticOn(){ return readJSON('doomsday-haptic', {on:false}).on; }
+function playTone(freq, start, dur, type, vol){
+  if (!soundOn()) return;
+  const ctx = ensureAudio(); if (!ctx) return;
+  const now = ctx.currentTime;
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = type||'sine'; o.frequency.value = freq;
+  g.gain.setValueAtTime(0, now+start);
+  g.gain.linearRampToValueAtTime(vol||0.05, now+start+0.01);
+  g.gain.exponentialRampToValueAtTime(0.001, now+start+dur);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(now+start); o.stop(now+start+dur+0.03);
+}
 function playSound(kind){
-  if(!soundOn()) return;
-  const ctx=ensureAudio(); if(!ctx) return;
-  const now=ctx.currentTime;
-  function tone(freq,start,dur,type,vol){
-    const o=ctx.createOscillator(), g=ctx.createGain();
-    o.type=type||'sine'; o.frequency.value=freq;
-    g.gain.setValueAtTime(0, now+start);
-    g.gain.linearRampToValueAtTime(vol||0.05, now+start+0.01);
-    g.gain.exponentialRampToValueAtTime(0.001, now+start+dur);
-    o.connect(g); g.connect(ctx.destination);
-    o.start(now+start); o.stop(now+start+dur+0.03);
-  }
-  if(kind==='correct'){ tone(660,0,0.09,'triangle',0.05); tone(880,0.08,0.14,'triangle',0.05); }
-  else if(kind==='wrong'){ tone(180,0,0.2,'sawtooth',0.05); }
-  else if(kind==='giveup'){ tone(260,0,0.12,'sine',0.04); tone(200,0.1,0.18,'sine',0.04); }
-  else if(kind==='achievement'){ tone(520,0,0.08,'triangle',0.05); tone(660,0.08,0.08,'triangle',0.05); tone(880,0.16,0.24,'triangle',0.06); }
-  else if(kind==='srank'){ tone(660,0,0.08,'triangle',0.05); tone(880,0.07,0.08,'triangle',0.05); tone(1100,0.14,0.08,'triangle',0.05); tone(1320,0.21,0.32,'triangle',0.06); }
+  if (kind==='correct'){ playTone(660,0,0.09,'triangle',0.05); playTone(880,0.08,0.14,'triangle',0.05); }
+  else if (kind==='wrong'){ playTone(180,0,0.2,'sawtooth',0.05); }
+  else if (kind==='giveup'){ playTone(260,0,0.12,'sine',0.04); playTone(200,0.1,0.18,'sine',0.04); }
+  else if (kind==='achievement'){ playTone(520,0,0.08,'triangle',0.05); playTone(660,0.08,0.08,'triangle',0.05); playTone(880,0.16,0.24,'triangle',0.06); }
+  else if (kind==='srank'){ playTone(660,0,0.08,'triangle',0.05); playTone(880,0.07,0.08,'triangle',0.05); playTone(1100,0.14,0.08,'triangle',0.05); playTone(1320,0.21,0.32,'triangle',0.06); }
 }
-function vibrate(kind){
-  if(!hapticOn() || !navigator.vibrate) return;
-  try {
-    if(kind==='correct') navigator.vibrate(15);
-    else if(kind==='wrong') navigator.vibrate([10,30,10]);
-    else navigator.vibrate(8);
-  } catch(e){}
+/* Soft clock tick, synced to the ring-deco hand's 1-per-second CSS step. Quiet by design. */
+function playTick(){ playTone(720, 0, 0.045, 'sine', 0.012); }
+let clockTickTimer = null;
+function startClockTick(){
+  if (REDUCE_MOTION || clockTickTimer) return;
+  clockTickTimer = setInterval(playTick, 1000);
 }
+startClockTick();
 
 /* ---------- Typewriter / codec engine ---------- */
 function delay(ms){ return new Promise(r => setTimeout(r, ms)); }
@@ -812,12 +840,16 @@ function applyTheme(t){
   document.querySelectorAll('.themebtn').forEach(b => b.classList.toggle('active', b.dataset.themeBtn === t));
   try { localStorage.setItem(THEME_KEY, t); } catch(e){}
 }
+function pickThemeByTime(){
+  const h = new Date().getHours();
+  if (h >= 10 && h < 19) return 'bright';
+  return Math.random() < 0.5 ? 'dark' : 'twilight';
+}
 function initTheme(){
   let stored = null;
   try { stored = localStorage.getItem(THEME_KEY); } catch(e){}
   if (stored){ applyTheme(stored); return; }
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  applyTheme(prefersDark ? 'dark' : 'bright');
+  applyTheme(pickThemeByTime());
 }
 document.querySelectorAll('.themebtn').forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.themeBtn)));
 initTheme();
@@ -833,10 +865,10 @@ function initSwitch(id, key){
   });
 }
 initSwitch('soundSwitch', 'doomsday-sound');
-initSwitch('hapticSwitch', 'doomsday-haptic');
 
 /* ---------- Wordmark ---------- */
 const wordmarkEl = document.getElementById('wordmark');
+const bootWordmarkEl = document.getElementById('bootWordmark');
 const WORDMARK_TILT = [-3, 2, -2, 3, -2, 2, -3, 2];
 "DOOMSDAY".split('').forEach((ch, i) => {
   const s = document.createElement('span');
@@ -844,6 +876,12 @@ const WORDMARK_TILT = [-3, 2, -2, 3, -2, 2, -3, 2];
   s.style.transform = `rotate(${WORDMARK_TILT[i % WORDMARK_TILT.length]}deg)`;
   s.style.setProperty('--shine-delay', `${i * 0.4}s`);
   wordmarkEl.appendChild(s);
+
+  const bs = document.createElement('span');
+  bs.textContent = ch;
+  bs.style.setProperty('--tilt', `${WORDMARK_TILT[i % WORDMARK_TILT.length]}deg`);
+  bs.style.animationDelay = `${i * 0.05}s`;
+  bootWordmarkEl.appendChild(bs);
 });
 
 /* ---------- Menu / tabs / masthead ---------- */
@@ -946,13 +984,13 @@ function runOneShotRound(puzzle, ui, onResult){
     if (idx === puzzle.correctIdx){
       btn.classList.add('correct', 'shine');
       typeInto(ui.feedbackEl, `> correct. ${DAYS[puzzle.correctIdx]}.`, 14);
-      playSound('correct'); vibrate('correct');
+      playSound('correct');
       onResult({ result:'solved', timeMs, chosenIdx:idx });
     } else {
       btn.classList.add('wrong');
       [...ui.buttonsEl.children].forEach(b => { if (parseInt(b.dataset.idx) === puzzle.correctIdx) b.classList.add('answer','shine'); });
       typeInto(ui.feedbackEl, `> not quite. it was ${DAYS[puzzle.correctIdx]}.`, 14);
-      playSound('wrong'); vibrate('wrong');
+      playSound('wrong');
       onResult({ result:'missed', timeMs, chosenIdx:idx });
     }
   }
@@ -996,6 +1034,7 @@ const dailyPuzzle = randomPuzzle(seededRand('doomsday-drill-v1-' + dateStr));
 const DAILY_EPOCH_MS = Date.UTC(2026, 8, 19);
 const [dsY, dsM, dsD] = dateStr.split('-').map(Number);
 const puzzleNumber = Math.floor((Date.UTC(dsY, dsM-1, dsD) - DAILY_EPOCH_MS) / 86400000) + 1;
+document.getElementById('mastheadRight').textContent = 'No. ' + puzzleNumber;
 
 document.getElementById('dailyDateLabel').textContent =
   new Date(dateStr + 'T00:00:00Z').toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric', timeZone:'UTC'}) + `  ·  #${puzzleNumber}`;
@@ -1093,21 +1132,52 @@ function initDaily(){
   runOneShotRound(dailyPuzzle, dailyUI, handleDailyResult);
 }
 
-/* ---- Share card (canvas) ---- */
+/* ---- Share card: drawn to an offscreen canvas, displayed as an <img> so it can be
+   long-pressed and saved to Photos directly, with a Share button for a one-tap native
+   save sheet on top. The shine overlays below are DOM/CSS only -- they sit above the
+   <img>, never touch the canvas pixels, so the exported file is always clean. ---- */
 function buildShareCard(res, grade){
-  dailyShareSlot.innerHTML = `<div class="sharecanvas-wrap"><canvas id="shareCanvas" width="600" height="820"></canvas></div>
+  dailyShareSlot.innerHTML = `<div class="sharecanvas-wrap">
+      <div class="sharecard-inner shine">
+        <img id="shareImg" alt="Doomsday #${puzzleNumber} result stamp">
+        <div class="shine-spot rank shine"></div>
+        <div class="shine-spot postmark shine"></div>
+      </div>
+    </div>
+    <p class="sharehint">Press and hold the stamp to save it, or use the buttons below.</p>
     <div class="actionrow">
       <button class="action primary" id="shareSaveBtn">Save image</button>
       <button class="action" id="shareCopyBtn">Copy result</button>
     </div>`;
-  drawShareCanvas(document.getElementById('shareCanvas'), res, grade);
-  document.getElementById('shareSaveBtn').addEventListener('click', () => {
-    const canvas = document.getElementById('shareCanvas');
-    const a = document.createElement('a');
-    a.download = `doomsday-${dateStr}.png`;
-    a.href = canvas.toDataURL('image/png');
-    a.click();
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 600; canvas.height = 820;
+  drawShareCanvas(canvas, res, grade).then(async () => {
+    const dataUrl = canvas.toDataURL('image/png');
+    const imgEl = document.getElementById('shareImg');
+    if (imgEl) imgEl.src = dataUrl;
+
+    let file = null;
+    try {
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+      if (blob) file = new File([blob], `doomsday-${dateStr}.png`, { type:'image/png' });
+    } catch(e){}
+
+    const saveBtn = document.getElementById('shareSaveBtn');
+    if (saveBtn){
+      saveBtn.addEventListener('click', () => {
+        if (file && navigator.canShare && navigator.canShare({ files:[file] })){
+          navigator.share({ files:[file], title:`Doomsday #${puzzleNumber}`, text:`Doomsday #${puzzleNumber} -- ${fmtTime(res.timeMs)} -- ${grade.letter} rank (${grade.label})` }).catch(()=>{});
+          return;
+        }
+        const a = document.createElement('a');
+        a.download = `doomsday-${dateStr}.png`;
+        a.href = dataUrl;
+        a.click();
+      });
+    }
   });
+
   document.getElementById('shareCopyBtn').addEventListener('click', async () => {
     const text = `Doomsday #${puzzleNumber} -- ${fmtTime(res.timeMs)} -- ${grade.letter} rank (${grade.label})\n${MONTH_NAMES[dailyPuzzle.month-1]} ${dailyPuzzle.day}, ${dailyPuzzle.year} was a ${DAYS[dailyPuzzle.correctIdx]}.`;
     const btn = document.getElementById('shareCopyBtn');
