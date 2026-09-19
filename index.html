@@ -566,13 +566,13 @@ function explainLines(puzzle){
   const {year, month, day, correctIdx} = puzzle;
   const monthName=MONTH_NAMES[month-1];
   const century=Math.floor(year/100), yy=year%100, anchor=centuryAnchor(century);
-  const a=Math.floor(yy/12), b=yy%12, c=Math.floor(b/4), dd=(a+b+c+anchor)%7;
+  const a=Math.floor(yy/12), b=yy%12, c=Math.floor(b/4), sum=a+b+c, dd=(sum+anchor)%7;
   const anchorDate=doomsdayAnchorDate(year, month);
   const diff=day-anchorDate, diffAbs=Math.abs(diff);
   const simple = [
-    `${century}00s years all start from ${DAYS[anchor]}.`,
-    `For ${year} specifically, that shifts to ${DAYS[dd]}.`,
-    `${monthName} ${anchorDate} always lands on that day.`,
+    `${yy} \u00F7 12 goes in ${a} time${a===1?'':'s'}, remainder ${b}.`,
+    `${a} + ${b}, plus ${b} \u00F7 4 (goes in ${c} time${c===1?'':'s'}) &mdash; that's ${sum} days past the century's anchor (${DAYS[anchor]}).`,
+    `Land on ${DAYS[dd]} &mdash; ${year}'s anchor weekday. ${monthName} ${anchorDate} always falls on it too.`,
     diffAbs===0
       ? `${monthName} ${day} is that exact date.`
       : `Count ${diffAbs} day${diffAbs===1?'':'s'} ${diff>0?'forward':'back'} to ${monthName} ${day} -- landing on ${DAYS[correctIdx]}.`
