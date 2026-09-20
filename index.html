@@ -1420,7 +1420,6 @@ const CRT_TAGLINES = ['EVERY DATE IS A MATH PROBLEM.', 'BECOME A HUMAN CALENDAR.
 
 function initDaily(){
   const existing = getDailyStatus();
-  if (existing){ mountDailyRoundUI(); showDailyDone(existing); showExistingStreak(); return; }
   showExistingStreak();
 
   const steps = buildDailyIntroSteps();
@@ -1442,13 +1441,14 @@ function initDaily(){
     prevBtn.disabled = idx===0;
     nextBtn.textContent = idx===steps.length-1 ? "I'm ready" : 'Next';
   }
-  function beginRound(){
+  function finishIntro(){
     mountDailyRoundUI();
-    runOneShotRound(dailyPuzzle, dailyUI, handleDailyResult);
+    if (existing) showDailyDone(existing);
+    else runOneShotRound(dailyPuzzle, dailyUI, handleDailyResult);
   }
 
   let crtActive = true;
-  function skipCrt(){ crtActive = false; beginRound(); }
+  function skipCrt(){ crtActive = false; finishIntro(); }
 
   async function playCrtIntro(){
     const canvas = document.getElementById('crtStaticCanvas');
@@ -1517,7 +1517,7 @@ function initDaily(){
   }
 
   prevBtn.addEventListener('click', () => { if (idx>0){ idx--; render(); } });
-  nextBtn.addEventListener('click', () => { if (idx===steps.length-1) beginRound(); else { idx++; render(); } });
+  nextBtn.addEventListener('click', () => { if (idx===steps.length-1) finishIntro(); else { idx++; render(); } });
   document.getElementById('skipTutorialBtn').addEventListener('click', skipCrt);
   playCrtIntro();
 }
