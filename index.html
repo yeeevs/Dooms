@@ -339,6 +339,7 @@
   .mini-table td{padding:7px 8px; border-bottom:1px dashed var(--border-strong);}
   .mini-table tr:last-child td{border-bottom:none;}
   .mini-table td:first-child{color:var(--muted); width:30%;}
+  .century-table td:first-child{width:46%; white-space:nowrap;}
   .mini-table tr.hl td{color:var(--accent); font-weight:700;}
   .mini-table tr.hl{background:var(--panel2);}
   .mini-table.twin-table td:nth-child(2){font-weight:700; color:var(--text); width:22%;}
@@ -434,6 +435,14 @@
   /* Hop & land chain */
   .hopchain{display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px; margin:12px 0 10px;}
   .hopchip{padding:6px 10px; border:1.4px solid var(--accent); border-radius:2px; font-family:var(--font-mono); font-weight:700; font-size:.68rem; color:var(--accent); background:var(--panel2); text-align:center; line-height:1.5;}
+
+  /* Guided Practice: multiple-choice buttons inside the codec box */
+  .choicegrid{display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:10px 0 4px;}
+  .choicebtn{padding:11px 6px; border-radius:2px; border:1.5px solid var(--border-strong); background:var(--panel2); color:var(--text); font-family:var(--font-body); font-size:.8rem; font-weight:700; text-transform:uppercase; cursor:pointer; box-shadow:2px 2px 0 0 var(--border-strong); transition:transform .08s ease, box-shadow .08s ease;}
+  .choicebtn:active:not(:disabled){transform:translate(2px,2px); box-shadow:0 0 0 0 var(--border-strong);}
+  .choicebtn:disabled{cursor:default;}
+  .choicebtn.correct{background:var(--good); color:var(--panel); border-color:var(--good);}
+  .choicebtn.wrong{background:var(--danger); color:var(--panel); border-color:var(--danger);}
   .hoparrow{font-family:var(--font-mono); font-size:.68rem; color:var(--muted); text-align:center; line-height:1.3;}
   .readygate-line{font-size:.82rem; color:var(--text); line-height:1.5; margin:2px 0 10px;}
   .readygate-seal{font-size:.72rem; color:var(--muted); line-height:1.5; margin:0 0 18px;}
@@ -602,6 +611,12 @@
     </div>
 
     <div class="card">
+      <p class="reflabel">Guided Practice</p>
+      <p class="howto-sub" style="margin-bottom:14px;">We'll walk one date with you, step by step -- pick your answer at each stage.</p>
+      <div id="guidedArea"><button class="action primary" id="guidedStartBtn" type="button">Start Guided Practice</button></div>
+    </div>
+
+    <div class="card">
       <p class="reflabel">Try one yourself</p>
       <p class="howto-sub" style="margin-bottom:14px;">No clock pressure — just practice the steps. One tap, then the answer either way.</p>
       <div class="puzzledate" id="hwPuzzleDate">–</div>
@@ -617,7 +632,7 @@
     <div class="card">
       <p class="reflabel">Century Days</p>
       <p class="refhint">Every 100 years shares one weekday. There are only 4, and they repeat forever.</p>
-      <table class="mini-table" id="centuryTable"></table>
+      <table class="mini-table century-table" id="centuryTable"></table>
       <p class="refhint" id="centuryMatchNote" style="margin-top:2px;"></p>
     </div>
 
@@ -884,12 +899,12 @@ async function showRoundCodec(slotEl, puzzle, outcome){
 
 /* ---------- Grades ---------- */
 const CENTURY_ROWS = [
-  {label:'1600s / 2000s', idx:2}, {label:'1700s / 2100s', idx:0},
-  {label:'1800s / 2200s', idx:5}, {label:'1900s / 2300s', idx:3},
+  {label:'1700s', idx:0}, {label:'1800s', idx:5},
+  {label:'1900s', idx:3}, {label:'2000s', idx:2},
 ];
 const MONTH_TWIN_DATES = [
   {m:1, label:'Jan', date:'1/3', tag:'1/4 in leap years', cat:'leap'},
-  {m:2, label:'Feb', date:'Last day', tag:'2/28, or 2/29 in leap years', cat:'leap'},
+  {m:2, label:'Feb', date:'2/28', tag:'2/29 in leap years', cat:'leap'},
   {m:3, label:'Mar', date:'3/14', tag:'Pi Day', cat:'hl'},
   {m:4, label:'Apr', date:'4/4', tag:'Easy pairs', cat:'hl'},
   {m:5, label:'May', date:'5/9', tag:'9-to-5 at the 7-11', cat:'hl'},
@@ -1391,26 +1406,13 @@ async function handleDailyResult(res){
 }
 
 function buildHopChainHTML(monthName, anchorDay, dd, diff, targetDay, resultIdx){
-  if (diff === 0) return `<p>${monthName} ${targetDay} IS the Twin Date.</p>`;
-  const dir = diff>0 ? 1 : -1, diffAbs = Math.abs(diff);
-  const weeks = Math.floor(diffAbs/7), remainder = diffAbs%7;
   const abbr = i => DAYS[i].slice(0,3).toUpperCase();
-  let curDay = anchorDay;
-  const chips = [`<span class="hopchip">${monthName.slice(0,3).toUpperCase()} ${curDay}<br>${abbr(dd)}</span>`];
-  for (let i=0; i<weeks; i++){
-    curDay += 7*dir;
-    chips.push(`<span class="hoparrow">&rarr;<br>+7</span>`);
-    chips.push(`<span class="hopchip">${monthName.slice(0,3).toUpperCase()} ${curDay}<br>${abbr(dd)}</span>`);
-  }
-  if (remainder > 0){
-    curDay += remainder*dir;
-    chips.push(`<span class="hoparrow">&rarr;<br>${dir>0?'+':'-'}${remainder}</span>`);
-    chips.push(`<span class="hopchip">${monthName.slice(0,3).toUpperCase()} ${curDay}<br>${abbr(resultIdx)}</span>`);
-  }
-  const insight = weeks>=1
-    ? `<p>Every 7 days lands on the same weekday -- that's why ${monthName} ${targetDay} is still a <b>${DAYS[resultIdx]}</b>.</p>`
-    : `<p>${monthName} ${targetDay} is a <b>${DAYS[resultIdx]}</b>.</p>`;
-  return `<div class="hopchain">${chips.join('')}</div>${insight}`;
+  const startChip = `<span class="hopchip">${monthName.slice(0,3).toUpperCase()} ${anchorDay}<br>${abbr(dd)}</span>`;
+  if (diff === 0) return `<div class="hopchain">${startChip}</div><p>${monthName} ${targetDay} IS the Twin Date.</p>`;
+  const diffAbs = Math.abs(diff);
+  const endChip = `<span class="hopchip">${monthName.slice(0,3).toUpperCase()} ${targetDay}<br>${abbr(resultIdx)}</span>`;
+  const arrow = `<span class="hoparrow">&rarr;<br>${diff>0?'+':'-'}${diffAbs}</span>`;
+  return `<div class="hopchain">${startChip}${arrow}${endChip}</div>`;
 }
 
 /* ---- Pre-round tutorial: a short tap-through sequence shown before every daily,
@@ -1433,7 +1435,7 @@ function buildDailyIntroSteps(){
             <p>Let's solve today's date: <b>${diMonthName} ${diDay}, ${diYear}</b>.</p>` },
     { eyebrow:'Step 1', title:'Find the Century Day',
       body:`<p>Every 100 years shares one weekday. The pattern repeats every 400 years, so there are only 4 to know.</p>
-            <table class="mini-table">${CENTURY_ROWS.map(r => `<tr class="${r.idx===diAnchor?'hl':''}"><td>${r.label}</td><td>${DAYS[r.idx]}</td></tr>`).join('')}</table>
+            <table class="mini-table century-table">${CENTURY_ROWS.map(r => `<tr class="${r.idx===diAnchor?'hl':''}"><td>${r.label}</td><td>${DAYS[r.idx]}</td></tr>`).join('')}</table>
             <p>${diYear} is in the <b>${diCentury}00s</b> -- Century Day is <b>${DAYS[diAnchor]}</b>.</p>` },
     { eyebrow:'Step 2', title:'Find the Doomsday',
       body:`<p>Split the last two digits into groups of 12, then that leftover into groups of 4, and add it all up.</p>
@@ -1447,9 +1449,9 @@ function buildDailyIntroSteps(){
             <table class="mini-table twin-table">${renderTwinTableRows(diMonth)}</table>
             <p>For ${diMonthName}, that's <b>${diMonthName} ${diAnchorDate}</b> -- a <b>${DAYS[diDD]}</b> this year.</p>` },
     { eyebrow:'Step 4', title:'Hop & land',
-      body:`<p>Count from the Twin Date to your date -- every full week you hop keeps you on the same weekday.</p>
+      body:`<p>From the Twin Date, hop forward or backward to your date.</p>
             ${buildHopChainHTML(diMonthName, diAnchorDate, diDD, diDiff, diDay, diResultIdx)}
-            <p>That's the whole trick.</p>` },
+            <p>Same four steps, every date.</p>` },
     { eyebrow:'One more thing', title:'How a round plays out',
       body:`<p class="readygate-line">This puzzle is intended to be solved mentally, but feel free to write down the math.</p>
             <p class="readygate-line">One date, one calculation, one tap.</p>
@@ -1509,9 +1511,14 @@ function initDaily(){
     nextBtn.textContent = idx===steps.length-1 ? "I'm ready" : 'Next';
   }
   function finishIntro(){
-    mountDailyRoundUI();
-    if (existing) showDailyDone(existing);
-    else runOneShotRound(dailyPuzzle, dailyUI, handleDailyResult);
+    if (existing){ mountDailyRoundUI(); showDailyDone(existing); return; }
+    const startRealRound = () => { mountDailyRoundUI(); runOneShotRound(dailyPuzzle, dailyUI, handleDailyResult); };
+    if (!readJSON('doomsday-guided-offered', false)){
+      writeJSON('doomsday-guided-offered', true);
+      showGuidedOfferGate(document.getElementById('dailyReadyGate'), startRealRound);
+      return;
+    }
+    startRealRound();
   }
 
   let crtActive = true;
@@ -1974,7 +1981,7 @@ const STEPS = [
           <p>Let's find today's: <b>${exMonthName} ${exDate.day}, ${exDate.year}</b>.</p>` },
   { eyebrow:'Step 1 of 4', title:'Find the Century Day',
     body:`<p>Every 100 years shares one weekday. We call it the <b>Century Day</b>. There are only 4 to remember, and they repeat forever.</p>
-          <table class="mini-table">${CENTURY_ROWS.map(r => `<tr class="${r.idx===exAnchor?'hl':''}"><td>${r.label}</td><td>${DAYS[r.idx]}</td></tr>`).join('')}</table>
+          <table class="mini-table century-table">${CENTURY_ROWS.map(r => `<tr class="${r.idx===exAnchor?'hl':''}"><td>${r.label}</td><td>${DAYS[r.idx]}</td></tr>`).join('')}</table>
           <p>${exDate.year} is in the <b>${exCentury}00s</b>, so its Century Day is <b>${DAYS[exAnchor]}</b>.</p>` },
   { eyebrow:'Step 2 of 4', title:'Turn it into Doomsday',
     body:`<p>Take the last two digits of the year -- <b>${exYY}</b> -- and split it into groups of 12:</p>
@@ -2031,6 +2038,245 @@ function newHowtoRound(){
   });
 }
 newHowtoRound();
+
+/* ---- Guided Practice: three multiple-choice questions, walked one at a time through
+   the codec box (not a chat UI -- the codec is already this game's "voice"), covering
+   Century Day, Doomsday, and the final hop. Twin Date is given as a stated fact rather
+   than quizzed, since it's a lookup, not a calculation. ---- */
+function shuffleArr(arr){
+  const a = arr.slice();
+  for (let i=a.length-1; i>0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; }
+  return a;
+}
+function pickDistractors(correctIdx, preferredExtra){
+  const near = [(correctIdx+1)%7, (correctIdx+6)%7];
+  const chosen = new Set([near[Math.floor(Math.random()*2)]]);
+  if (preferredExtra !== undefined && preferredExtra !== correctIdx) chosen.add(preferredExtra);
+  const pool = [0,1,2,3,4,5,6].filter(i => i!==correctIdx && !chosen.has(i));
+  while (chosen.size < 3 && pool.length){
+    const idx = Math.floor(Math.random()*pool.length);
+    chosen.add(pool.splice(idx,1)[0]);
+  }
+  return [...chosen];
+}
+function askQuestion(container, correctIdx, preferredExtra){
+  return new Promise(resolve => {
+    const options = shuffleArr([correctIdx, ...pickDistractors(correctIdx, preferredExtra)]);
+    const grid = document.createElement('div');
+    grid.className = 'choicegrid';
+    options.forEach(idx => {
+      const btn = document.createElement('button');
+      btn.className = 'choicebtn';
+      btn.textContent = DAYS[idx];
+      btn.dataset.idx = idx;
+      btn.addEventListener('click', () => {
+        [...grid.children].forEach(b => b.disabled = true);
+        const correct = idx === correctIdx;
+        btn.classList.add(correct ? 'correct' : 'wrong');
+        if (!correct){
+          [...grid.children].forEach(b => { if (parseInt(b.dataset.idx) === correctIdx) b.classList.add('correct'); });
+        }
+        playSound(correct ? 'correct' : 'wrong');
+        setTimeout(() => resolve(correct), 650);
+      });
+      grid.appendChild(btn);
+    });
+    container.appendChild(grid);
+  });
+}
+/* Same choice-grid UI as askQuestion, but for a small integer answer (a quotient)
+   instead of a weekday -- used for the arithmetic sub-questions in Guided Practice. */
+function pickNumberDistractors(correct, maxVal){
+  const candidates = new Set();
+  for (const off of [-2,-1,1,2,3]){
+    const v = correct + off;
+    if (v >= 0 && v <= maxVal && v !== correct) candidates.add(v);
+  }
+  let arr = shuffleArr([...candidates]).slice(0,3);
+  while (arr.length < 3){
+    const v = Math.floor(Math.random()*(maxVal+1));
+    if (v !== correct && !arr.includes(v)) arr.push(v);
+  }
+  return arr;
+}
+function askNumberQuestion(container, correctValue, maxVal){
+  return new Promise(resolve => {
+    const options = shuffleArr([correctValue, ...pickNumberDistractors(correctValue, maxVal)]);
+    const grid = document.createElement('div');
+    grid.className = 'choicegrid';
+    options.forEach(val => {
+      const btn = document.createElement('button');
+      btn.className = 'choicebtn';
+      btn.textContent = String(val);
+      btn.dataset.val = val;
+      btn.addEventListener('click', () => {
+        [...grid.children].forEach(b => b.disabled = true);
+        const correct = val === correctValue;
+        btn.classList.add(correct ? 'correct' : 'wrong');
+        if (!correct){
+          [...grid.children].forEach(b => { if (parseInt(b.dataset.val) === correctValue) b.classList.add('correct'); });
+        }
+        playSound(correct ? 'correct' : 'wrong');
+        setTimeout(() => resolve(correct), 650);
+      });
+      grid.appendChild(btn);
+    });
+    container.appendChild(grid);
+  });
+}
+async function startGuidedPractice(){
+  const area = document.getElementById('guidedArea');
+  area.innerHTML = '';
+  const box = codecShell('Guided Practice');
+  area.appendChild(box);
+  const body = box.querySelector('.codec-body');
+
+  const puzzle = randomPuzzle(Math.random);
+  const { year, month, day, correctIdx } = puzzle;
+  const monthName = MONTH_NAMES[month-1];
+  const century = Math.floor(year/100), yy = year%100, anchor = centuryAnchor(century);
+  const a = Math.floor(yy/12), b = yy%12, c = Math.floor(b/4), sum = a+b+c, dd = (sum+anchor)%7;
+  const anchorDate = doomsdayAnchorDate(year, month);
+
+  async function line(text){
+    const p = document.createElement('div'); p.className = 'codec-line'; body.appendChild(p);
+    await typeInto(p, text, 12);
+    await delay(200);
+  }
+
+  await line(`Let's work through ${monthName} ${day}, ${year} together.`);
+  await line(`First: what's the Century Day for the ${century}00s?`);
+  const q1 = document.createElement('div'); body.appendChild(q1);
+  const r1 = await askQuestion(q1, anchor);
+  await line(r1 ? `Right -- ${DAYS[anchor]}.` : `It's ${DAYS[anchor]}.`);
+  const results = [r1];
+
+  await line(`Now let's find ${year}'s Anchor Weekday -- the Doomsday. Take the last two digits: ${yy}.`);
+  await line(`${yy} \u00F7 12 -- what's the quotient?`);
+  const qA = document.createElement('div'); body.appendChild(qA);
+  const rA = await askNumberQuestion(qA, a, 8);
+  results.push(rA);
+  await line(`${yy} \u00F7 12 = ${a}, remainder ${b}.`);
+  if (b > 0){
+    await line(`Now ${b} \u00F7 4 -- what's the quotient?`);
+    const qC = document.createElement('div'); body.appendChild(qC);
+    const rC = await askNumberQuestion(qC, c, 3);
+    results.push(rC);
+    await line(`${b} \u00F7 4 = ${c}.`);
+  } else {
+    await line(`No remainder left, so that part's just 0.`);
+  }
+  await line(`Add it up: ${a} + ${b} + ${c} = ${sum} -- that's ${sum} days past the Century Day (${DAYS[anchor]}).`);
+  await line(`So: what's ${year}'s Anchor Weekday -- the Doomsday?`);
+  const q2 = document.createElement('div'); body.appendChild(q2);
+  const r2 = await askQuestion(q2, dd);
+  results.push(r2);
+  await line(r2 ? `Right -- ${DAYS[dd]}.` : `It's ${DAYS[dd]}.`);
+
+  await line(`Twin Date: ${monthName} ${anchorDate} always shares that, so it's a ${DAYS[dd]} too.`);
+  await line(`Last one: hop from there to ${monthName} ${day}. What weekday do you land on?`);
+  const q3 = document.createElement('div'); body.appendChild(q3);
+  const r3 = await askQuestion(q3, correctIdx, dd);
+  results.push(r3);
+  await line(r3 ? `Nailed it -- ${DAYS[correctIdx]}.` : `It lands on ${DAYS[correctIdx]}.`);
+
+  const score = results.filter(Boolean).length;
+  await line(`${score}/${results.length} this round.`);
+  box.querySelector('.codec-dot').classList.remove('pulse');
+
+  const again = document.createElement('button');
+  again.className = 'action primary'; again.style.marginTop = '12px'; again.style.width = '100%';
+  again.textContent = 'Try another';
+  again.addEventListener('click', startGuidedPractice);
+  area.appendChild(again);
+}
+document.getElementById('guidedStartBtn').addEventListener('click', startGuidedPractice);
+
+/* ---- Pre-daily gate: shown once, ever, right after the intro tutorial finishes and
+   before a first-timer's very first real daily attempt. Uses its own random practice
+   date -- never the actual daily's hidden date -- so nothing is spoiled. Lives inside
+   the same TV screen the tutorial just played in, so it reads as one continuous flow. ---- */
+function showGuidedOfferGate(container, onDone){
+  container.innerHTML = `
+    <p class="readygate-line">New here? Let's walk through one together before your first real attempt.</p>
+    <div class="actionrow">
+      <button class="action primary" id="preDailyGuidedStart" type="button">Start Guided Practice</button>
+      <button class="action" id="preDailyGuidedSkip" type="button">Skip to today's puzzle</button>
+    </div>`;
+  document.getElementById('preDailyGuidedStart').addEventListener('click', () => runGuidedPracticeGate(container, onDone));
+  document.getElementById('preDailyGuidedSkip').addEventListener('click', onDone);
+}
+async function runGuidedPracticeGate(container, onDone){
+  container.innerHTML = '';
+  const intro = document.createElement('p');
+  intro.className = 'readygate-line';
+  intro.textContent = "Let's walk through one together, then you'll take on today's puzzle for real.";
+  container.appendChild(intro);
+
+  const box = codecShell('Guided Practice');
+  container.appendChild(box);
+  const body = box.querySelector('.codec-body');
+
+  const puzzle = randomPuzzle(Math.random);
+  const { year, month, day, correctIdx } = puzzle;
+  const monthName = MONTH_NAMES[month-1];
+  const century = Math.floor(year/100), yy = year%100, anchor = centuryAnchor(century);
+  const a = Math.floor(yy/12), b = yy%12, c = Math.floor(b/4), sum = a+b+c, dd = (sum+anchor)%7;
+  const anchorDate = doomsdayAnchorDate(year, month);
+
+  async function line(text){
+    const p = document.createElement('div'); p.className = 'codec-line'; body.appendChild(p);
+    await typeInto(p, text, 12);
+    await delay(200);
+  }
+
+  await line(`Let's work through ${monthName} ${day}, ${year} together.`);
+  await line(`First: what's the Century Day for the ${century}00s?`);
+  const q1 = document.createElement('div'); body.appendChild(q1);
+  const r1 = await askQuestion(q1, anchor);
+  await line(r1 ? `Right -- ${DAYS[anchor]}.` : `It's ${DAYS[anchor]}.`);
+  const results = [r1];
+
+  await line(`Now let's find ${year}'s Anchor Weekday -- the Doomsday. Take the last two digits: ${yy}.`);
+  await line(`${yy} \u00F7 12 -- what's the quotient?`);
+  const qA = document.createElement('div'); body.appendChild(qA);
+  const rA = await askNumberQuestion(qA, a, 8);
+  results.push(rA);
+  await line(`${yy} \u00F7 12 = ${a}, remainder ${b}.`);
+  if (b > 0){
+    await line(`Now ${b} \u00F7 4 -- what's the quotient?`);
+    const qC = document.createElement('div'); body.appendChild(qC);
+    const rC = await askNumberQuestion(qC, c, 3);
+    results.push(rC);
+    await line(`${b} \u00F7 4 = ${c}.`);
+  } else {
+    await line(`No remainder left, so that part's just 0.`);
+  }
+  await line(`Add it up: ${a} + ${b} + ${c} = ${sum} -- that's ${sum} days past the Century Day (${DAYS[anchor]}).`);
+  await line(`So: what's ${year}'s Anchor Weekday -- the Doomsday?`);
+  const q2 = document.createElement('div'); body.appendChild(q2);
+  const r2 = await askQuestion(q2, dd);
+  results.push(r2);
+  await line(r2 ? `Right -- ${DAYS[dd]}.` : `It's ${DAYS[dd]}.`);
+
+  await line(`Twin Date: ${monthName} ${anchorDate} always shares that, so it's a ${DAYS[dd]} too.`);
+  await line(`Last one: hop from there to ${monthName} ${day}. What weekday do you land on?`);
+  const q3 = document.createElement('div'); body.appendChild(q3);
+  const r3 = await askQuestion(q3, correctIdx, dd);
+  results.push(r3);
+  await line(r3 ? `Nailed it -- ${DAYS[correctIdx]}.` : `It lands on ${DAYS[correctIdx]}.`);
+
+  const score = results.filter(Boolean).length;
+  await line(`${score}/${results.length}. Ready for the real thing.`);
+  box.querySelector('.codec-dot').classList.remove('pulse');
+
+  const cont = document.createElement('button');
+  cont.className = 'action primary'; cont.style.marginTop = '12px'; cont.style.width = '100%';
+  cont.textContent = "Continue to today's puzzle";
+  cont.addEventListener('click', onDone);
+  container.appendChild(cont);
+}
+
 
 /* ================= STATS ================= */
 /* ---- Backup/restore: everything lives in localStorage only, so this bundles every
