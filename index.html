@@ -269,9 +269,10 @@
   button.action:disabled{opacity:.4; cursor:default; box-shadow:none;}
 
   /* Mode selector (Training) */
-  .modeselect{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:14px;}
-  .modeselect-label{font-family:var(--font-mono); font-size:.66rem; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-right:2px;}
-  .modebtn{padding:5px 11px; border:1.4px solid var(--border-strong); border-radius:var(--radius); background:none; color:var(--muted); font-family:var(--font-mono); font-size:.66rem; text-transform:uppercase; letter-spacing:.02em; cursor:pointer; text-align:center;}
+  .modeselect{margin-bottom:14px;}
+  .modeselect-label{display:block; font-family:var(--font-mono); font-size:.66rem; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;}
+  .modeselect-row{display:grid; grid-template-columns:repeat(4,1fr); gap:5px;}
+  .modebtn{padding:7px 3px; border:1.4px solid var(--border-strong); border-radius:var(--radius); background:none; color:var(--muted); font-family:var(--font-mono); font-size:.6rem; text-transform:uppercase; letter-spacing:.01em; cursor:pointer; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .modebtn.active{border-color:var(--accent); color:var(--accent); background:var(--panel2); font-weight:700;}
   .modestatus{display:flex; justify-content:space-between; align-items:center; font-family:var(--font-mono); font-size:.76rem; color:var(--muted); margin-bottom:12px; padding:0 2px;}
   .modestatus b{color:var(--text); font-weight:700;}
@@ -350,7 +351,14 @@
   .stepnav{display:flex; gap:10px; margin-top:18px;}
   .howto-sub{color:var(--muted); font-size:.8rem; margin:0 0 16px; line-height:1.5;}
   .reflabel{font-family:var(--font-display); font-weight:800; font-size:1.15rem; margin:0 0 4px; text-transform:uppercase;}
+  .mastery-card{text-align:center;}
+  .mastery-title{font-family:var(--font-display); font-weight:800; font-size:1.7rem; text-transform:uppercase; color:var(--accent2); margin:2px 0 12px; letter-spacing:.01em;}
+  .masterybar{width:100%; height:14px; border:1.4px solid var(--text); border-radius:2px; background:var(--panel2); overflow:hidden;}
+  .masterybar-fill{height:100%; background:var(--accent2); transition:width .4s ease;}
   .refhint{color:var(--muted); font-size:.76rem; margin:0 0 4px;}
+  .backupbox{display:block; width:100%; box-sizing:border-box; font-family:var(--font-mono); font-size:.7rem; line-height:1.5; background:var(--panel2); border:1.4px solid var(--border-strong); border-radius:var(--radius); padding:9px; color:var(--text); resize:vertical; margin:10px 0;}
+  .backup-error{color:var(--danger); font-size:.76rem; margin:0 0 10px; line-height:1.4;}
+  .backup-note{color:var(--muted); font-size:.76rem; margin:10px 0 4px; line-height:1.4;}
 
   /* Weekly recap */
   .recap-card{position:relative; padding-top:18px;}
@@ -392,8 +400,15 @@
 
   .readygate{position:relative; z-index:1; background:var(--panel); margin:8px; border-radius:4px; padding:14px 12px 10px; flex:1; overflow-y:auto;}
   #dailyGameCard.crt-mode{background:none; border:none; box-shadow:none; padding:0;}
-  .skiptutorial{display:block; width:100%; text-align:center; background:none; border:none; color:var(--muted); font-family:var(--font-mono); font-size:.7rem; text-decoration:underline; text-decoration-style:dotted; text-underline-offset:3px; cursor:pointer; padding:4px; margin:14px 0 4px;}
-  .skiptutorial:hover{color:var(--danger);}
+  .skiptutorial{
+    display:block; width:100%; text-align:center; cursor:pointer;
+    background:var(--panel2); border:1.6px solid var(--danger); border-radius:var(--radius);
+    color:var(--danger); font-family:var(--font-body); font-weight:700; font-size:.76rem;
+    text-transform:uppercase; letter-spacing:.03em; padding:11px; margin:14px 0 4px;
+    box-shadow:2px 2px 0 0 var(--border-strong);
+    transition:transform .08s ease, box-shadow .08s ease, background .12s ease, color .12s ease;
+  }
+  .skiptutorial:active{transform:translate(2px,2px); box-shadow:0 0 0 0 var(--border-strong);}
   .demo-tiles{display:flex; gap:5px; flex-shrink:0; width:98px; justify-content:center;}
   .demo-tile{
     padding:7px 7px; border-radius:2px; border:1.5px solid var(--text); font-family:var(--font-body); font-weight:700; font-size:.66rem; text-transform:uppercase;
@@ -548,11 +563,13 @@
     </div>
 
     <div class="modeselect" id="modeSelect">
-      <span class="modeselect-label">Challenges:</span>
-      <button class="modebtn active" data-mode="practice">Practice</button>
-      <button class="modebtn" data-mode="streak10">10 Streak</button>
-      <button class="modebtn" data-mode="blitz">Blitz 60</button>
-      <button class="modebtn" data-mode="survival">Survival</button>
+      <span class="modeselect-label">Challenges</span>
+      <div class="modeselect-row">
+        <button class="modebtn active" data-mode="practice">Practice</button>
+        <button class="modebtn" data-mode="streak10">10 Streak</button>
+        <button class="modebtn" data-mode="blitz">Blitz 60</button>
+        <button class="modebtn" data-mode="survival">Survival</button>
+      </div>
     </div>
 
     <div class="modestatus" id="modeStatus" style="display:none;"></div>
@@ -617,6 +634,12 @@
 
   <!-- STATS -->
   <section class="panel" id="panel-stats">
+    <div class="card mastery-card">
+      <p class="reflabel">Mastery</p>
+      <div class="mastery-title" id="masteryTitle">Novice</div>
+      <div class="masterybar"><div class="masterybar-fill" id="masteryFill" style="width:0%;"></div></div>
+      <p class="refhint" id="masteryNote" style="text-align:center; margin-top:6px;"></p>
+    </div>
     <div class="stats">
       <div class="stat"><div class="n" id="stTotal">0</div><div class="l">Played</div></div>
       <div class="stat"><div class="n" id="stAcc">—</div><div class="l">Accuracy</div></div>
@@ -641,6 +664,15 @@
       <div class="rowline"><span class="l">Best ever</span><span class="r" id="stBestStreak">0 days</span></div>
       <div class="rowline"><span class="l">Personal best time</span><span class="r" id="stBestTime">—</span></div>
       <div class="rowline"><span class="l">Streak freeze</span><span class="r" id="stFreezes">—</span></div>
+    </div>
+    <div class="card">
+      <p class="reflabel">Backup your progress</p>
+      <p class="refhint">Everything lives on this device only -- nothing is backed up automatically. Save a code somewhere safe, or restore one from another device.</p>
+      <div class="actionrow">
+        <button class="action primary" id="exportBackupBtn" type="button">Get my code</button>
+        <button class="action" id="importBackupBtn" type="button">Restore a code</button>
+      </div>
+      <div id="backupArea"></div>
     </div>
   </section>
 
@@ -940,6 +972,40 @@ function unlockAchievement(id){
   playSound('achievement');
   return true;
 }
+
+/* ---- Mastery: a slow, lifetime title track based on total puzzles solved, across
+   every mode combined. Never resets. Distinct naming from per-round S/A/B/C/D grades
+   on purpose, so a "Scholar" title is never confused with a single round's grade. ---- */
+const MASTERY_TIERS = [
+  {min:0, name:'Novice'},
+  {min:10, name:'Apprentice'},
+  {min:30, name:'Adept'},
+  {min:75, name:'Scholar'},
+  {min:150, name:'Master'},
+  {min:300, name:'Doomsday Sage'},
+];
+function masteryTierIdxFor(totalSolved){
+  let idx = 0;
+  for (let i=0; i<MASTERY_TIERS.length; i++) if (totalSolved >= MASTERY_TIERS[i].min) idx = i;
+  return idx;
+}
+function masteryProgress(totalSolved){
+  const idx = masteryTierIdxFor(totalSolved);
+  const tier = MASTERY_TIERS[idx], next = MASTERY_TIERS[idx+1];
+  if (!next) return { tier, next:null, pct:100, remaining:0 };
+  const span = next.min - tier.min, progressed = totalSolved - tier.min;
+  return { tier, next, pct: Math.max(0, Math.min(100, Math.round(progressed/span*100))), remaining: next.min - totalSolved };
+}
+function checkMasteryTierUp(meta){
+  const idx = masteryTierIdxFor(meta.totalSolved);
+  if (meta.lastMasteryTierIdx === undefined || meta.lastMasteryTierIdx === null){
+    meta.lastMasteryTierIdx = idx;
+  } else if (idx > meta.lastMasteryTierIdx){
+    meta.lastMasteryTierIdx = idx;
+    showToast('New Title', `You're now a ${MASTERY_TIERS[idx].name}.`);
+    playSound('achievement');
+  }
+}
 function checkAchievements(ctx){
   if (ctx.totalSolved>=1) unlockAchievement('first_solve');
   if (ctx.result==='solved' && ctx.timeMs<10000) unlockAchievement('first_sub10');
@@ -962,6 +1028,7 @@ function recordRound({mode, result, timeMs, correctIdx, isTrainingRound}){
   if (result==='solved'){ meta.totalSolved += 1; meta.weekdays[correctIdx] = true; }
   else if (result==='missed') meta.totalMissed += 1;
   else if (result==='gaveup') meta.totalGaveUp += 1;
+  checkMasteryTierUp(meta);
   setMeta(meta);
 
   const dailyStats = readJSON('doomsday-stats', {});
@@ -1630,8 +1697,26 @@ async function drawShareCanvas(canvas, res, grade){
 
   ctx.fillStyle = text; ctx.font = "900 34px 'Big Shoulders Display'"; ctx.textAlign='center'; ctx.textBaseline='alphabetic';
   ctx.fillText(`${MONTH_NAMES[puzzle.month-1].slice(0,3).toUpperCase()} ${puzzle.day}`, cx, sy+358);
-  ctx.font = "700 12px 'Space Mono'"; ctx.fillStyle = ink;
+  ctx.font = "700 12px 'Space Mono'"; ctx.fillStyle = text;
   ctx.fillText(`${DAYS[puzzle.correctIdx].toUpperCase()} \u00B7 ${puzzle.year} \u00B7 #${puzzleNumber}`, cx, sy+380);
+
+  // The math, condensed to four labeled lines -- digestible, not a wall of formulas.
+  const pCentury = Math.floor(puzzle.year/100), pYY = puzzle.year%100, pAnchor = centuryAnchor(pCentury);
+  const pA = Math.floor(pYY/12), pB = pYY%12, pC = Math.floor(pB/4), pSum = pA+pB+pC, pDD = (pSum+pAnchor)%7;
+  const pAnchorDate = doomsdayAnchorDate(puzzle.year, puzzle.month);
+  const pDiff = puzzle.day - pAnchorDate, pDiffAbs = Math.abs(pDiff);
+  const pMonthAbbr = MONTH_NAMES[puzzle.month-1].slice(0,3).toUpperCase();
+
+  ctx.textAlign='center'; ctx.font = "700 9px 'Space Mono'"; ctx.fillStyle = muted;
+  ctx.fillText('T H E   M A T H', cx, sy+412);
+  ctx.font = "600 13px 'Space Mono'"; ctx.fillStyle = text;
+  const mathLines = [
+    `Century Day: ${DAYS[pAnchor].toUpperCase()}`,
+    `Doomsday: ${DAYS[pDD].toUpperCase()}  (+${pSum})`,
+    `Twin Date: ${pMonthAbbr} ${pAnchorDate}`,
+    pDiffAbs===0 ? 'Hop: none needed' : `Hop: ${pDiff>0?'+':'-'}${pDiffAbs} day${pDiffAbs===1?'':'s'}`,
+  ];
+  mathLines.forEach((line, i) => ctx.fillText(line, cx, sy+438+i*24));
 
   ctx.textAlign='left';
   ctx.font = "900 40px 'Big Shoulders Display'"; ctx.fillStyle = text;
@@ -1948,6 +2033,62 @@ function newHowtoRound(){
 newHowtoRound();
 
 /* ================= STATS ================= */
+/* ---- Backup/restore: everything lives in localStorage only, so this bundles every
+   doomsday-* key into one portable code the person can save and restore elsewhere. ---- */
+function backupSnapshot(){
+  const data = {};
+  for (let i=0; i<localStorage.length; i++){
+    const key = localStorage.key(i);
+    if (key && key.indexOf('doomsday-')===0) data[key] = localStorage.getItem(key);
+  }
+  return data;
+}
+function encodeBackup(data){ return btoa(unescape(encodeURIComponent(JSON.stringify(data)))); }
+function decodeBackup(code){
+  const json = decodeURIComponent(escape(atob(code.trim())));
+  const data = JSON.parse(json);
+  const keys = Object.keys(data);
+  if (!keys.length || !keys.every(k => k.indexOf('doomsday-')===0)) throw new Error('invalid backup code');
+  return data;
+}
+function showBackupExport(){
+  const area = document.getElementById('backupArea');
+  const code = encodeBackup(backupSnapshot());
+  area.innerHTML = `
+    <p class="backup-note">Copy this and save it somewhere (Notes app, email to yourself) -- paste it back in "Restore a code" on any device to bring this progress back.</p>
+    <textarea class="backupbox" id="backupCodeBox" readonly rows="4"></textarea>
+    <div class="actionrow"><button class="action primary" id="backupCopyBtn" type="button">Copy code</button><button class="action" id="backupCloseBtn" type="button">Close</button></div>`;
+  document.getElementById('backupCodeBox').value = code;
+  document.getElementById('backupCopyBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('backupCopyBtn');
+    try { await navigator.clipboard.writeText(code); const old=btn.textContent; btn.textContent='Copied!'; setTimeout(()=>btn.textContent=old,1400); }
+    catch(e){ document.getElementById('backupCodeBox').select(); }
+  });
+  document.getElementById('backupCloseBtn').addEventListener('click', () => { area.innerHTML=''; });
+}
+function showBackupImport(){
+  const area = document.getElementById('backupArea');
+  area.innerHTML = `
+    <p class="backup-note">Paste a code from another device. This replaces this device's current progress.</p>
+    <textarea class="backupbox" id="backupPasteBox" rows="4" placeholder="Paste your code here"></textarea>
+    <p class="backup-error" id="backupError" style="display:none;"></p>
+    <div class="actionrow"><button class="action primary" id="backupRestoreBtn" type="button">Restore</button><button class="action" id="backupCancelBtn" type="button">Cancel</button></div>`;
+  document.getElementById('backupCancelBtn').addEventListener('click', () => { area.innerHTML=''; });
+  document.getElementById('backupRestoreBtn').addEventListener('click', () => {
+    const raw = document.getElementById('backupPasteBox').value;
+    const errEl = document.getElementById('backupError');
+    let data;
+    try { data = decodeBackup(raw); }
+    catch(e){ errEl.textContent = "That code doesn't look right -- check for missing characters and try again."; errEl.style.display = 'block'; return; }
+    if (!confirm("This will replace this device's current progress with the backup. Continue?")) return;
+    Object.keys(data).forEach(k => localStorage.setItem(k, data[k]));
+    area.innerHTML = '<p class="backup-note">Restored. Reloading...</p>';
+    setTimeout(() => location.reload(), 700);
+  });
+}
+document.getElementById('exportBackupBtn').addEventListener('click', showBackupExport);
+document.getElementById('importBackupBtn').addEventListener('click', showBackupImport);
+
 function renderStatsPanel(){
   const hist = readJSON('doomsday-history', []);
   const solved = hist.filter(h => h.result==='solved');
@@ -1956,6 +2097,14 @@ function renderStatsPanel(){
   const acc = (solved.length + missed.length) > 0 ? Math.round(solved.length/(solved.length+missed.length)*100) : null;
   const avg = solved.length ? solved.reduce((a,h)=>a+h.timeMs,0)/solved.length : null;
   const srankCount = solved.filter(h => h.grade==='S').length;
+
+  const meta = getMeta();
+  const mp = masteryProgress(meta.totalSolved || 0);
+  document.getElementById('masteryTitle').textContent = mp.tier.name;
+  document.getElementById('masteryFill').style.width = mp.pct + '%';
+  document.getElementById('masteryNote').textContent = mp.next
+    ? `${mp.remaining} more solve${mp.remaining===1?'':'s'} to ${mp.next.name}`
+    : 'Top title reached -- there is no higher rank.';
 
   document.getElementById('stTotal').textContent = total;
   document.getElementById('stAcc').textContent = acc===null ? '\u2014' : acc+'%';
