@@ -350,6 +350,7 @@
   .mini-table.twin-table tr.cur{background:var(--panel2); box-shadow:inset 3px 0 0 var(--accent2);}
   .calc-line{font-family:var(--font-mono); font-size:.79rem; background:var(--panel2); border:1px solid var(--border); border-radius:2px; padding:8px 10px; margin:5px 0; overflow-x:auto;}
   .stepnav{display:flex; gap:10px; margin-top:18px;}
+  .stepnav-final{margin-top:18px;}
   .howto-sub{color:var(--muted); font-size:.8rem; margin:0 0 16px; line-height:1.5;}
   .reflabel{font-family:var(--font-display); font-weight:800; font-size:1.15rem; margin:0 0 4px; text-transform:uppercase;}
   .mastery-card{text-align:center;}
@@ -539,9 +540,16 @@
                 <p class="step-eyebrow" id="dailyStepEyebrow"></p>
                 <h2 class="step-title" id="dailyStepTitle"></h2>
                 <div class="step-body" id="dailyStepBody"></div>
-                <div class="stepnav">
+                <div class="stepnav" id="dailyStepNav">
                   <button class="action" id="dailyStepPrev">Back</button>
                   <button class="action primary" id="dailyStepNext">Next</button>
+                </div>
+                <div class="stepnav-final" id="dailyFinalNav" style="display:none;">
+                  <div class="actionrow" style="margin-top:0;">
+                    <button class="action" id="dailyFinalBack">Back</button>
+                    <button class="action" id="dailyFinalGuided">Guided Practice</button>
+                  </div>
+                  <button class="action primary" id="dailyFinalPlay" style="width:100%; margin-top:8px;">Play Daily</button>
                 </div>
               </div>
               <div class="crt-scanlines"></div>
@@ -1499,6 +1507,8 @@ function initDaily(){
   const bodyEl = document.getElementById('dailyStepBody');
   const prevBtn = document.getElementById('dailyStepPrev');
   const nextBtn = document.getElementById('dailyStepNext');
+  const stepNavEl = document.getElementById('dailyStepNav');
+  const finalNavEl = document.getElementById('dailyFinalNav');
   steps.forEach(() => dotsEl.appendChild(document.createElement('span')));
 
   function render(){
@@ -1507,22 +1517,19 @@ function initDaily(){
     titleEl.innerHTML = s.title;
     bodyEl.innerHTML = s.body;
     [...dotsEl.children].forEach((dot,i) => dot.classList.toggle('on', i===idx));
+    const isLast = idx === steps.length-1;
+    stepNavEl.style.display = isLast ? 'none' : 'flex';
+    finalNavEl.style.display = isLast ? 'block' : 'none';
     prevBtn.disabled = idx===0;
-    nextBtn.textContent = idx===steps.length-1 ? "I'm ready" : 'Next';
   }
-  function finishIntro(){
-    if (existing){ mountDailyRoundUI(); showDailyDone(existing); return; }
-    const startRealRound = () => { mountDailyRoundUI(); runOneShotRound(dailyPuzzle, dailyUI, handleDailyResult); };
-    if (!readJSON('doomsday-guided-offered', false)){
-      writeJSON('doomsday-guided-offered', true);
-      showGuidedOfferGate(document.getElementById('dailyReadyGate'), startRealRound);
-      return;
-    }
-    startRealRound();
+  function startRealRound(){
+    mountDailyRoundUI();
+    if (existing) showDailyDone(existing);
+    else runOneShotRound(dailyPuzzle, dailyUI, handleDailyResult);
   }
 
   let crtActive = true;
-  function skipCrt(){ crtActive = false; finishIntro(); }
+  function skipCrt(){ crtActive = false; startRealRound(); }
 
   async function playCrtIntro(){
     const canvas = document.getElementById('crtStaticCanvas');
@@ -1591,7 +1598,12 @@ function initDaily(){
   }
 
   prevBtn.addEventListener('click', () => { if (idx>0){ idx--; render(); } });
-  nextBtn.addEventListener('click', () => { if (idx===steps.length-1) finishIntro(); else { idx++; render(); } });
+  nextBtn.addEventListener('click', () => { idx++; render(); });
+  document.getElementById('dailyFinalBack').addEventListener('click', () => { idx--; render(); });
+  document.getElementById('dailyFinalGuided').addEventListener('click', () => {
+    runGuidedPracticeGate(document.getElementById('dailyReadyGate'), startRealRound);
+  });
+  document.getElementById('dailyFinalPlay').addEventListener('click', startRealRound);
   document.getElementById('skipTutorialBtn').addEventListener('click', skipCrt);
   playCrtIntro();
 }
@@ -2192,20 +2204,10 @@ async function startGuidedPractice(){
 }
 document.getElementById('guidedStartBtn').addEventListener('click', startGuidedPractice);
 
-/* ---- Pre-daily gate: shown once, ever, right after the intro tutorial finishes and
-   before a first-timer's very first real daily attempt. Uses its own random practice
-   date -- never the actual daily's hidden date -- so nothing is spoiled. Lives inside
-   the same TV screen the tutorial just played in, so it reads as one continuous flow. ---- */
-function showGuidedOfferGate(container, onDone){
-  container.innerHTML = `
-    <p class="readygate-line">New here? Let's walk through one together before your first real attempt.</p>
-    <div class="actionrow">
-      <button class="action primary" id="preDailyGuidedStart" type="button">Start Guided Practice</button>
-      <button class="action" id="preDailyGuidedSkip" type="button">Skip to today's puzzle</button>
-    </div>`;
-  document.getElementById('preDailyGuidedStart').addEventListener('click', () => runGuidedPracticeGate(container, onDone));
-  document.getElementById('preDailyGuidedSkip').addEventListener('click', onDone);
-}
+/* ---- Guided Practice, reachable from the tutorial's last screen (as a standing choice,
+   not a one-time popup). Uses its own random practice date -- never the actual daily's
+   hidden date -- so nothing is spoiled. Renders inside the same TV screen the tutorial
+   just played in, so it reads as one continuous flow. ---- */
 async function runGuidedPracticeGate(container, onDone){
   container.innerHTML = '';
   const intro = document.createElement('p');
