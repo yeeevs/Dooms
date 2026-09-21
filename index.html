@@ -1438,7 +1438,7 @@ function buildDailyIntroSteps(){
 
   return [
     { eyebrow:'The big idea', title:'Every date hides a weekday',
-      body:`<p>Follow four steps, and you'll always find the right weekday.</p>
+      body:`<p>Every date can be solved with these four steps:</p>
             <p><b>Century Day &rarr; Doomsday &rarr; Twin Date &rarr; Hop &amp; land.</b></p>
             <p>Let's solve today's date: <b>${diMonthName} ${diDay}, ${diYear}</b>.</p>` },
     { eyebrow:'Step 1', title:'Find the Century Day',
@@ -1446,7 +1446,8 @@ function buildDailyIntroSteps(){
             <table class="mini-table century-table">${CENTURY_ROWS.map(r => `<tr class="${r.idx===diAnchor?'hl':''}"><td>${r.label}</td><td>${DAYS[r.idx]}</td></tr>`).join('')}</table>
             <p>${diYear} is in the <b>${diCentury}00s</b> -- Century Day is <b>${DAYS[diAnchor]}</b>.</p>` },
     { eyebrow:'Step 2', title:'Find the Doomsday',
-      body:`<p>Split the last two digits into groups of 12, then that leftover into groups of 4, and add it all up.</p>
+      body:`<p>The Doomsday is that year's own anchor day -- just like the Century Day, but specific to <b>${diYear}</b>.</p>
+            <p>Split the last two digits into groups of 12, then that leftover into groups of 4, and add it all up.</p>
             <div class="calc-line">${diYY} \u00F7 12 = ${diA} group${diA===1?'':'s'}, ${diB} left over</div>
             <div class="calc-line">${diB} \u00F7 4 = ${diC} group${diC===1?'':'s'}</div>
             <div class="calc-line">${diA} + ${diB} + ${diC} = ${diSum} days past the Century Day</div>
@@ -1996,7 +1997,8 @@ const STEPS = [
           <table class="mini-table century-table">${CENTURY_ROWS.map(r => `<tr class="${r.idx===exAnchor?'hl':''}"><td>${r.label}</td><td>${DAYS[r.idx]}</td></tr>`).join('')}</table>
           <p>${exDate.year} is in the <b>${exCentury}00s</b>, so its Century Day is <b>${DAYS[exAnchor]}</b>.</p>` },
   { eyebrow:'Step 2 of 4', title:'Turn it into Doomsday',
-    body:`<p>Take the last two digits of the year -- <b>${exYY}</b> -- and split it into groups of 12:</p>
+    body:`<p>The Doomsday is that year's own anchor day -- just like the Century Day, but specific to <b>${exDate.year}</b>.</p>
+          <p>Take the last two digits of the year -- <b>${exYY}</b> -- and split it into groups of 12:</p>
           <div class="calc-line">${exYY} \u00F7 12 = ${exA} group${exA===1?'':'s'}, ${exB} left over</div>
           <div class="calc-line">Split that leftover into groups of 4: ${exB} \u00F7 4 = ${exC} group${exC===1?'':'s'}</div>
           <div class="calc-line">Add it up: ${exA} + ${exB} + ${exC} = ${exSum}</div>
