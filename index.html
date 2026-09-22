@@ -105,7 +105,7 @@
   }
   #wordmark{margin:4px 0 2px;}
   .mainbyline{text-align:center; color:var(--muted); font-size:.68rem; letter-spacing:.03em; margin:0 0 4px; position:relative; z-index:1;}
-  #wordmark span{width:19px; height:19px; font-size:10px; border-width:1.2px; box-shadow:1.3px 1.3px 0 0 var(--border-strong);}
+  #wordmark span{width:29px; height:29px; font-size:15px; border-width:1.8px; border-color:var(--accent); color:var(--accent); box-shadow:2px 2px 0 0 var(--accent);}
 
   .tab{display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:none; border:none; border-bottom:1px dashed var(--border-strong); padding:15px 2px; font-family:var(--font-display); font-weight:800; font-size:1.1rem; text-transform:uppercase; color:var(--muted); cursor:pointer; position:relative;}
   .tab .idx{font-family:var(--font-mono); font-size:.7rem; font-weight:400; color:var(--border-strong); width:20px; flex-shrink:0;}
@@ -174,6 +174,13 @@
   .daybtns button.correct{background:var(--good); color:var(--panel); border-color:var(--good); animation:stamp .32s ease; box-shadow:2px 2px 0 0 var(--border-strong); opacity:1;}
   .daybtns button.wrong{background:var(--danger); color:var(--panel); border-color:var(--danger); animation:stamp .32s ease; box-shadow:2px 2px 0 0 var(--border-strong); opacity:1;}
   .daybtns button.answer{background:var(--gold); color:#241a00; border-color:var(--gold); animation:stamp .32s ease .1s backwards; box-shadow:2px 2px 0 0 var(--border-strong); opacity:1;}
+  /* Colorblind-safe backup: a shape, not just a color, marks each outcome. */
+  .daybtns button.correct::after, .daybtns button.answer::after, .daybtns button.wrong::after{
+    position:absolute; top:2px; right:4px; font-size:.85rem; line-height:1; font-weight:900; z-index:2;
+  }
+  .daybtns button.correct::after{content:'\2713'; color:#fff;}
+  .daybtns button.wrong::after{content:'\2715'; color:#fff;}
+  .daybtns button.answer::after{content:'\2713'; color:#000;}
   @keyframes stamp{0%{transform:scale(1.5) rotate(-8deg); opacity:0;} 60%{transform:scale(0.94) rotate(2deg); opacity:1;} 100%{transform:scale(1) rotate(0deg);}}
   @media (prefers-reduced-motion:reduce){ .daybtns button.correct, .daybtns button.wrong, .daybtns button.answer, .rankpill{animation:none !important;} .daybtns button{transform:none !important;} }
 
@@ -213,6 +220,7 @@
   @media (prefers-reduced-motion:reduce){ .codec-dot.pulse{animation:none;} }
   .codec-body{padding:14px 16px 16px; font-family:var(--font-mono); font-size:.83rem; line-height:1.8; color:var(--text); background-image:repeating-linear-gradient(var(--panel) 0 27px, var(--border) 27px 28px); background-size:100% 28px;}
   .codec-line{white-space:pre-wrap;}
+  .codec-line.calc{font-family:var(--font-mono); font-size:.79rem; background:var(--panel2); border:1px solid var(--border); border-radius:2px; padding:8px 10px; margin:5px 0; overflow-x:auto;}
   .codec-line b{color:var(--accent);}
   .codec-line.headline{font-family:var(--font-display); font-weight:800; font-size:1.05rem; text-transform:none; margin-bottom:4px;}
 
@@ -365,6 +373,8 @@
   /* Weekly recap */
   .recap-card{position:relative; padding-top:18px;}
   .recap-close{position:absolute; top:10px; right:10px; width:26px; height:26px; border:1.4px solid var(--border-strong); border-radius:50%; background:var(--panel2); color:var(--muted); font-size:1rem; line-height:1; cursor:pointer;}
+  .whatsnew-list{margin:8px 0 2px; padding-left:20px; font-size:.82rem; line-height:1.6; color:var(--text);}
+  .whatsnew-list li{margin-bottom:4px;}
   .recap-grid{display:flex; gap:8px; margin:10px 0 12px;}
   .recap-grid > div{flex:1; text-align:center; background:var(--panel2); border:1.4px solid var(--border-strong); border-radius:var(--radius); padding:10px 6px;}
   .recap-grid .n{font-family:var(--font-display); font-weight:800; font-size:1.4rem; line-height:1;}
@@ -439,13 +449,16 @@
 
   /* Guided Practice: multiple-choice buttons inside the codec box */
   .choicegrid{display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:10px 0 4px;}
-  .choicebtn{padding:11px 6px; border-radius:2px; border:1.5px solid var(--border-strong); background:var(--panel2); color:var(--text); font-family:var(--font-body); font-size:.8rem; font-weight:700; text-transform:uppercase; cursor:pointer; box-shadow:2px 2px 0 0 var(--border-strong); transition:transform .08s ease, box-shadow .08s ease;}
+  .choicebtn{position:relative; padding:11px 6px; border-radius:2px; border:1.5px solid var(--border-strong); background:var(--panel2); color:var(--text); font-family:var(--font-body); font-size:.8rem; font-weight:700; text-transform:uppercase; cursor:pointer; box-shadow:2px 2px 0 0 var(--border-strong); transition:transform .08s ease, box-shadow .08s ease;}
   .choicebtn:active:not(:disabled){transform:translate(2px,2px); box-shadow:0 0 0 0 var(--border-strong);}
   .choicebtn:disabled{cursor:default;}
   .choicebtn.correct{background:var(--good); color:var(--panel); border-color:var(--good);}
   .choicebtn.wrong{background:var(--danger); color:var(--panel); border-color:var(--danger);}
+  .choicebtn.correct::after{content:'\2713'; position:absolute; top:2px; right:5px; font-size:.75rem; line-height:1; color:#fff;}
+  .choicebtn.wrong::after{content:'\2715'; position:absolute; top:2px; right:5px; font-size:.75rem; line-height:1; color:#fff;}
   .hoparrow{font-family:var(--font-mono); font-size:.68rem; color:var(--muted); text-align:center; line-height:1.3;}
   .readygate-line{font-size:.82rem; color:var(--text); line-height:1.5; margin:2px 0 10px;}
+  .readygate-line.strong{font-weight:800;}
   .readygate-seal{font-size:.72rem; color:var(--muted); line-height:1.5; margin:0 0 18px;}
 </style>
 </head>
@@ -487,8 +500,11 @@
     </button>
   </div>
   <div class="togglerow"><span>Sound</span><div class="switch" id="soundSwitch"></div></div>
-  <p class="drawer-footer">A game by Kevin Serrano &middot; v1.8</p>
+  <div class="togglerow"><span>Music</span><div class="switch" id="musicSwitch"></div></div>
+  <p class="drawer-footer">Music: "Jazz Rainy Night Music" by Alex Morgan &middot; A game by Kevin Serrano &middot; v2.0</p>
 </nav>
+
+<audio id="bgMusic" loop preload="none" src="alex-morgan-jazz-rainy-night-music-563584.mp3"></audio>
 
 <div class="toast" id="toast"><b id="toastTitle"></b><span id="toastBody"></span></div>
 
@@ -514,7 +530,7 @@
       <line class="clock-hand" x1="50" y1="50" x2="50" y2="21" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
       <circle cx="50" cy="50" r="1.6" fill="currentColor"/>
     </svg>
-    <div class="wordmark" id="wordmark"></div>
+    <div class="wordmark" id="wordmark" role="button" tabindex="0" aria-label="Go to Daily" style="cursor:pointer;"></div>
     <p class="mainbyline">A Game by Kevin Serrano</p>
   </header>
 
@@ -527,31 +543,15 @@
     <div id="weeklyRecapSlot"></div>
     <div class="rowline"><span class="l" id="dailyDateLabel"></span><span class="r" id="countdown"></span></div>
     <div id="streakChipSlot"></div>
+    <div id="whatsNewSlot"></div>
+    <div id="iosBannerSlot"></div>
 
     <div class="card crt-mode" id="dailyGameCard">
       <div class="crt-wrap" id="crtWrap">
         <div class="crt-tv" id="crtTv">
           <div class="crt-body">
             <div class="crt-screen">
-              <canvas class="crt-static" id="crtStaticCanvas"></canvas>
-              <div class="crt-tagline" id="crtTagline"></div>
-              <div class="readygate" id="dailyReadyGate" style="display:none;">
-                <div class="stepdots" id="dailyStepDots"></div>
-                <p class="step-eyebrow" id="dailyStepEyebrow"></p>
-                <h2 class="step-title" id="dailyStepTitle"></h2>
-                <div class="step-body" id="dailyStepBody"></div>
-                <div class="stepnav" id="dailyStepNav">
-                  <button class="action" id="dailyStepPrev">Back</button>
-                  <button class="action primary" id="dailyStepNext">Next</button>
-                </div>
-                <div class="stepnav-final" id="dailyFinalNav" style="display:none;">
-                  <div class="actionrow" style="margin-top:0;">
-                    <button class="action" id="dailyFinalBack">Back</button>
-                    <button class="action" id="dailyFinalGuided">Guided Practice</button>
-                  </div>
-                  <button class="action primary" id="dailyFinalPlay" style="width:100%; margin-top:8px;">Play Daily</button>
-                </div>
-              </div>
+              <div class="readygate" id="dailyReadyGate" style="display:none;"></div>
               <div class="crt-scanlines"></div>
               <div class="crt-vignette"></div>
             </div>
@@ -559,7 +559,6 @@
           </div>
           <div class="crt-legs"><span></span><span></span></div>
         </div>
-        <button class="skiptutorial" id="skipTutorialBtn" type="button">Skip tutorial -- I know the Doomsday method</button>
       </div>
     </div>
     <div id="dailyResultSlot"></div>
@@ -773,17 +772,18 @@ function explainLines(puzzle){
   const anchorDate=doomsdayAnchorDate(year, month);
   const diff=day-anchorDate, diffAbs=Math.abs(diff);
   const simple = [
-    `Every 100 years shares one weekday. We call it the Century Day. For the ${century}00s, it's ${DAYS[anchor]}.`,
-    `Now let's turn that into ${year}'s own special weekday -- its Doomsday. Take the last two digits, ${yy}, and split them into groups of 12: ${a} group${a===1?'':'s'}, with ${b} left over.`,
+    { text: `Every 100 years shares a weekday -- the Century Day. For the ${century}00s, that's ${DAYS[anchor]}.` },
+    { text: `Now for ${year}'s own Doomsday. Take the last two digits, ${yy}:` },
+    { text: `${yy} \u00F7 12 = ${a} group${a===1?'':'s'}, ${b} left over`, cls:'calc' },
     b>0
-      ? `Split that leftover, ${b}, into groups of 4: ${c} group${c===1?'':'s'}.`
-      : `No leftover this time, so that part's just 0.`,
-    `Add it all up: ${a} + ${b} + ${c} = ${sum}. Hop ${sum} day${sum===1?'':'s'} past the Century Day...`,
-    `...and you land on ${DAYS[dd]}. That's ${year}'s Doomsday!`,
-    `${monthName} ${anchorDate} is always a Twin Date -- it shares this year's Doomsday, so it's a ${DAYS[dd]} too.`,
+      ? { text: `${b} \u00F7 4 = ${c} group${c===1?'':'s'}`, cls:'calc' }
+      : { text: `No leftover this time, so that part's just 0.` },
+    { text: `${a} + ${b} + ${c} = ${sum}`, cls:'calc' },
+    { text: `Hop ${sum} day${sum===1?'':'s'} past the Century Day, and you land on ${DAYS[dd]} -- that's ${year}'s Doomsday.` },
+    { text: `${monthName} ${anchorDate} is always a Twin Date -- it shares this year's Doomsday, so it's a ${DAYS[dd]} too.` },
     diffAbs===0
-      ? `${monthName} ${day} IS the Twin Date.`
-      : `Hop ${diffAbs} day${diffAbs===1?'':'s'} ${diff>0?'forward':'back'} from there to ${monthName} ${day} -- and you land on ${DAYS[correctIdx]}.`
+      ? { text: `${monthName} ${day} IS the Twin Date.` }
+      : { text: `Hop ${diffAbs} day${diffAbs===1?'':'s'} ${diff>0?'forward':'back'} from there to ${monthName} ${day} -- and you land on ${DAYS[correctIdx]}.` }
   ];
   const math = [
     `Century ${century}00 -&gt; anchor index ${anchor} (${DAYS[anchor]}).`,
@@ -899,7 +899,7 @@ async function showRoundCodec(slotEl, puzzle, outcome){
   const ex = explainLines(puzzle);
   const label = outcome==='solved' ? 'Confirmed' : (outcome==='missed' ? 'Missed' : 'Debrief');
   const introMap = { solved:"Nice — here's the check:", missed:"Not quite — here's why:", gaveup:"Here's why:" };
-  const lines = [ {text: ex.headline, cls:'headline'}, {text: introMap[outcome]}, ...ex.simple.map(s => ({text:s})) ];
+  const lines = [ {text: ex.headline, cls:'headline'}, {text: introMap[outcome]}, ...ex.simple ];
   const box = await playCodec(slotEl, label, lines);
   appendMathToggle(box, ex.math);
   return box;
@@ -1109,6 +1109,78 @@ function initSwitch(id, key){
 }
 initSwitch('soundSwitch', 'doomsday-sound');
 
+/* ---- Background music: separate from the SFX sound toggle, since someone might want
+   one without the other. Browsers block audio autoplay until a real user gesture, so if
+   music was left on from a previous visit, playback resumes on the first tap anywhere
+   rather than trying (and failing) to play automatically on load. ---- */
+function initMusicSwitch(){
+  const el = document.getElementById('musicSwitch');
+  const audio = document.getElementById('bgMusic');
+  const key = 'doomsday-music';
+  const targetVolume = 0.35;
+  let fadeTimer = null;
+
+  function fadeTo(target, ms){
+    if (fadeTimer) clearInterval(fadeTimer);
+    const start = audio.volume, steps = 20, stepMs = ms/steps;
+    let i = 0;
+    fadeTimer = setInterval(() => {
+      i++;
+      audio.volume = Math.max(0, Math.min(1, start + (target-start)*(i/steps)));
+      if (i >= steps){
+        clearInterval(fadeTimer);
+        audio.volume = target;
+        if (target === 0) audio.pause();
+      }
+    }, stepMs);
+  }
+
+  function setOn(on){
+    el.classList.toggle('on', on);
+    writeJSON(key, {on});
+    if (on){
+      audio.volume = 0;
+      audio.play().catch(() => {});
+      fadeTo(targetVolume, 900);
+    } else {
+      fadeTo(0, 600);
+    }
+  }
+
+  const savedOn = readJSON(key, {on:false}).on;
+  el.classList.toggle('on', savedOn);
+  el.addEventListener('click', () => setOn(!readJSON(key, {on:false}).on));
+
+  if (savedOn){
+    audio.volume = targetVolume;
+    const resumeOnce = () => { audio.play().catch(() => {}); document.removeEventListener('click', resumeOnce); };
+    document.addEventListener('click', resumeOnce, { once: true });
+  }
+}
+initMusicSwitch();
+
+/* iOS: only Safari can offer "Add to Home Screen" -- Apple restricts that capability
+   to Safari alone, so no button in this page can trigger it on Brave/Chrome/Firefox
+   for iOS. All we can honestly do is point people at Safari. Shown until dismissed. */
+function maybeShowIOSBanner(){
+  if (readJSON('doomsday-ios-banner-dismissed', false)) return;
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua);
+  const isSafari = /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+  if (!isIOS || isSafari) return;
+  const slot = document.getElementById('iosBannerSlot');
+  if (!slot) return;
+  slot.innerHTML = `<div class="card" style="position:relative; padding-top:18px;">
+    <button class="recap-close" id="iosBannerClose" aria-label="Dismiss">&times;</button>
+    <p class="refhint" style="margin:0;">On iPhone, only Safari can add pages to your Home Screen -- it's an Apple restriction, not something this page controls. Open this link in Safari if you'd like to add it.</p>
+  </div>`;
+  document.getElementById('iosBannerClose').addEventListener('click', () => {
+    writeJSON('doomsday-ios-banner-dismissed', true);
+    slot.innerHTML = '';
+  });
+}
+maybeShowIOSBanner();
+
 /* ---------- Wordmark ---------- */
 const wordmarkEl = document.getElementById('wordmark');
 const bootWordmarkEl = document.getElementById('bootWordmark');
@@ -1126,6 +1198,8 @@ const WORDMARK_TILT = [-3, 2, -2, 3, -2, 2, -3, 2];
   bs.style.animationDelay = `${i * 0.05}s`;
   bootWordmarkEl.appendChild(bs);
 });
+wordmarkEl.addEventListener('click', () => switchTab('daily'));
+wordmarkEl.addEventListener('keydown', e => { if (e.key==='Enter' || e.key===' '){ e.preventDefault(); switchTab('daily'); } });
 
 /* ---------- Menu / tabs / masthead ---------- */
 const menuTrigger = document.getElementById('menuTrigger');
@@ -1332,6 +1406,28 @@ function mountDailyRoundUI(){
   dailyUI.buttonsEl = document.getElementById('dailyButtons');
   dailyUI.feedbackEl = document.getElementById('dailyFeedback');
   dailyUI.giveUpBtn = document.getElementById('dailyGiveUp');
+  maybeShowWhatsNew();
+}
+/* Shown once, ever, and only to returning players who already have history --
+   a brand-new install gets the full tutorial instead, so this would be noise. */
+function maybeShowWhatsNew(){
+  if (readJSON('doomsday-whatsnew-2-0-seen', false)) return;
+  const meta = getMeta();
+  const hasHistory = (meta.totalSolved||0) + (meta.totalMissed||0) + (meta.totalGaveUp||0) > 0;
+  if (!hasHistory) { writeJSON('doomsday-whatsnew-2-0-seen', true); return; }
+  writeJSON('doomsday-whatsnew-2-0-seen', true);
+  const slot = document.getElementById('whatsNewSlot');
+  slot.innerHTML = `<div class="card recap-card">
+    <button class="recap-close" id="whatsNewClose" aria-label="Dismiss">&times;</button>
+    <p class="reflabel">New in 2.0</p>
+    <ul class="whatsnew-list">
+      <li>Mastery titles that track your lifetime progress -- see Stats</li>
+      <li>Guided Practice -- a step-by-step walkthrough -- see How 2</li>
+      <li>Share cards now show the full math breakdown</li>
+      <li>Backup your progress with a portable code -- see Stats</li>
+    </ul>
+  </div>`;
+  document.getElementById('whatsNewClose').addEventListener('click', () => { slot.innerHTML = ''; });
 }
 const dailyCodecSlot = document.getElementById('dailyCodecSlot');
 const dailyRankSlot = document.getElementById('dailyRankSlot');
@@ -1392,7 +1488,7 @@ function showDailyDone(status){
   const ex = explainLines(dailyPuzzle);
   const introMap = { solved:"Nice — here's the check:", missed:"Not quite — here's why:", gaveup:"Here's why:" };
   const box = renderCodecStatic(dailyCodecSlot, status.result==='solved'?'Confirmed':(status.result==='missed'?'Missed':'Debrief'),
-    [{text:ex.headline, cls:'headline'}, {text:introMap[status.result]}, ...ex.simple.map(s=>({text:s}))]);
+    [{text:ex.headline, cls:'headline'}, {text:introMap[status.result]}, ...ex.simple]);
   appendMathToggle(box, ex.math);
   if (status.result==='solved') buildShareCard({result:status.result, timeMs:status.timeMs}, grade);
   dailyTrainCta.style.display = 'block';
@@ -1500,113 +1596,46 @@ function initDaily(){
   const existing = getDailyStatus();
   showExistingStreak();
 
-  const steps = buildDailyIntroSteps();
-  let idx = 0;
-  const dotsEl = document.getElementById('dailyStepDots');
-  const eyebrowEl = document.getElementById('dailyStepEyebrow');
-  const titleEl = document.getElementById('dailyStepTitle');
-  const bodyEl = document.getElementById('dailyStepBody');
-  const prevBtn = document.getElementById('dailyStepPrev');
-  const nextBtn = document.getElementById('dailyStepNext');
-  const stepNavEl = document.getElementById('dailyStepNav');
-  const finalNavEl = document.getElementById('dailyFinalNav');
-  steps.forEach(() => dotsEl.appendChild(document.createElement('span')));
-
-  function render(){
-    const s = steps[idx];
-    eyebrowEl.textContent = s.eyebrow;
-    titleEl.innerHTML = s.title;
-    bodyEl.innerHTML = s.body;
-    [...dotsEl.children].forEach((dot,i) => dot.classList.toggle('on', i===idx));
-    const isLast = idx === steps.length-1;
-    stepNavEl.style.display = isLast ? 'none' : 'flex';
-    finalNavEl.style.display = isLast ? 'block' : 'none';
-    prevBtn.disabled = idx===0;
-  }
   function startRealRound(){
     mountDailyRoundUI();
     if (existing) showDailyDone(existing);
     else runOneShotRound(dailyPuzzle, dailyUI, handleDailyResult);
   }
 
-  let crtActive = true;
-  function skipCrt(){ crtActive = false; startRealRound(); }
-
-  async function playCrtIntro(){
-    const canvas = document.getElementById('crtStaticCanvas');
-    const taglineEl = document.getElementById('crtTagline');
+  async function renderGate(){
     const gateEl = document.getElementById('dailyReadyGate');
-    const tagline = CRT_TAGLINES[Math.floor(Math.random()*CRT_TAGLINES.length)];
-
-    if (REDUCE_MOTION){
-      taglineEl.textContent = tagline;
-      taglineEl.style.opacity = '1';
-      await delay(500);
-      if (!crtActive) return;
-      canvas.style.display = 'none';
-      taglineEl.style.display = 'none';
-      gateEl.style.display = 'block';
-      render();
-      return;
-    }
-
-    canvas.width = 80; canvas.height = 60;
-    const staticTimer = setInterval(() => { if (crtActive) drawStaticFrame(canvas); }, 70);
-    playStaticSound(1.5);
-    await delay(1500);
-    clearInterval(staticTimer);
-    if (!crtActive) return;
-
-    canvas.style.transition = 'opacity .3s ease';
-    canvas.style.opacity = '0';
-
-    // Shows one line of text on the screen, holds it, then fades it out.
-    // The first beat uses the CRT "tune-in" flicker; later beats crossfade.
-    // (A completed forwards-filled animation keeps overriding inline styles
-    // until explicitly cleared -- lock in the visible state before cancelling
-    // the animation, or the fade-out silently does nothing.)
-    async function showBeat(text, hold, flicker){
-      taglineEl.textContent = text;
-      if (flicker){
-        taglineEl.classList.add('show');
-      } else {
-        taglineEl.style.transition = 'opacity .3s ease';
-        taglineEl.style.opacity = '1';
-      }
-      await delay(hold);
-      if (!crtActive) return false;
-      taglineEl.style.opacity = '1';
-      taglineEl.style.transform = 'scaleY(1)';
-      taglineEl.style.animation = 'none';
-      taglineEl.classList.remove('show');
-      void taglineEl.offsetWidth;
-      taglineEl.style.transition = 'opacity .25s ease';
-      taglineEl.style.opacity = '0';
-      await delay(260);
-      if (!crtActive) return false;
-      taglineEl.style.animation = '';
-      return true;
-    }
-
-    if (!(await showBeat(tagline, 2400, true))) return;
-    if (!(await showBeat('WELCOME TO DOOMSDAY.', 1300, false))) return;
-    if (!(await showBeat("Here's how you play...", 1200, false))) return;
-
-    canvas.style.display = 'none';
-    taglineEl.style.display = 'none';
+    gateEl.innerHTML = '';
     gateEl.style.display = 'block';
-    render();
+
+    const introLines = [
+      { text: 'A date goes in. A weekday comes out.', strong: true },
+      { text: 'Doomsday is a mental-math puzzle built around four steps:' },
+      { text: 'Century Day \u2192 Doomsday \u2192 Twin Date \u2192 Hop & Land', strong: true },
+      { text: "Want to learn the method, or jump straight into today's puzzle?" },
+    ];
+    await delay(REDUCE_MOTION ? 0 : 500);
+    for (const l of introLines){
+      const p = document.createElement('p');
+      p.className = 'readygate-line' + (l.strong ? ' strong' : '');
+      gateEl.appendChild(p);
+      await typeInto(p, l.text, 30);
+      await delay(REDUCE_MOTION ? 0 : 450);
+    }
+
+    const row = document.createElement('div');
+    row.className = 'actionrow';
+    row.style.marginTop = '14px';
+    row.innerHTML = `
+      <button class="action" id="dailyGuidedBtn" type="button">Show me how</button>
+      <button class="action primary" id="dailyPlayBtn" type="button">Play Daily</button>`;
+    gateEl.appendChild(row);
+    document.getElementById('dailyGuidedBtn').addEventListener('click', () => {
+      runGuidedPracticeGate(gateEl, startRealRound);
+    });
+    document.getElementById('dailyPlayBtn').addEventListener('click', startRealRound);
   }
 
-  prevBtn.addEventListener('click', () => { if (idx>0){ idx--; render(); } });
-  nextBtn.addEventListener('click', () => { idx++; render(); });
-  document.getElementById('dailyFinalBack').addEventListener('click', () => { idx--; render(); });
-  document.getElementById('dailyFinalGuided').addEventListener('click', () => {
-    runGuidedPracticeGate(document.getElementById('dailyReadyGate'), startRealRound);
-  });
-  document.getElementById('dailyFinalPlay').addEventListener('click', startRealRound);
-  document.getElementById('skipTutorialBtn').addEventListener('click', skipCrt);
-  playCrtIntro();
+  renderGate();
 }
 
 /* ---- Share card: drawn to an offscreen canvas, displayed as an <img> so it can be
@@ -2160,6 +2189,10 @@ async function startGuidedPractice(){
 
   await line(`Let's work through ${monthName} ${day}, ${year} together.`);
   await line(`First: what's the Century Day for the ${century}00s?`);
+  const tableWrap = document.createElement('div');
+  tableWrap.innerHTML = `<table class="mini-table century-table">${CENTURY_ROWS.map(r => `<tr class="${r.idx===anchor?'hl':''}"><td>${r.label}</td><td>${DAYS[r.idx]}</td></tr>`).join('')}</table>`;
+  body.appendChild(tableWrap);
+  await delay(300);
   const q1 = document.createElement('div'); body.appendChild(q1);
   const r1 = await askQuestion(q1, anchor);
   await line(r1 ? `Right -- ${DAYS[anchor]}.` : `It's ${DAYS[anchor]}.`);
@@ -2187,7 +2220,12 @@ async function startGuidedPractice(){
   results.push(r2);
   await line(r2 ? `Right -- ${DAYS[dd]}.` : `It's ${DAYS[dd]}.`);
 
-  await line(`Twin Date: ${monthName} ${anchorDate} always shares that, so it's a ${DAYS[dd]} too.`);
+  await line(`Every month also has one fixed date that always lands on the year's Doomsday -- its Twin Date. You just memorize one per month, same as the Century Day.`);
+  const twinWrap = document.createElement('div');
+  twinWrap.innerHTML = `<table class="mini-table twin-table">${renderTwinTableRows(month)}</table>`;
+  body.appendChild(twinWrap);
+  await delay(300);
+  await line(`So ${monthName} ${anchorDate} is a ${DAYS[dd]} too.`);
   await line(`Last one: hop from there to ${monthName} ${day}. What weekday do you land on?`);
   const q3 = document.createElement('div'); body.appendChild(q3);
   const r3 = await askQuestion(q3, correctIdx, dd);
@@ -2236,6 +2274,10 @@ async function runGuidedPracticeGate(container, onDone){
 
   await line(`Let's work through ${monthName} ${day}, ${year} together.`);
   await line(`First: what's the Century Day for the ${century}00s?`);
+  const tableWrap = document.createElement('div');
+  tableWrap.innerHTML = `<table class="mini-table century-table">${CENTURY_ROWS.map(r => `<tr class="${r.idx===anchor?'hl':''}"><td>${r.label}</td><td>${DAYS[r.idx]}</td></tr>`).join('')}</table>`;
+  body.appendChild(tableWrap);
+  await delay(300);
   const q1 = document.createElement('div'); body.appendChild(q1);
   const r1 = await askQuestion(q1, anchor);
   await line(r1 ? `Right -- ${DAYS[anchor]}.` : `It's ${DAYS[anchor]}.`);
@@ -2263,7 +2305,12 @@ async function runGuidedPracticeGate(container, onDone){
   results.push(r2);
   await line(r2 ? `Right -- ${DAYS[dd]}.` : `It's ${DAYS[dd]}.`);
 
-  await line(`Twin Date: ${monthName} ${anchorDate} always shares that, so it's a ${DAYS[dd]} too.`);
+  await line(`Every month also has one fixed date that always lands on the year's Doomsday -- its Twin Date. You just memorize one per month, same as the Century Day.`);
+  const twinWrap = document.createElement('div');
+  twinWrap.innerHTML = `<table class="mini-table twin-table">${renderTwinTableRows(month)}</table>`;
+  body.appendChild(twinWrap);
+  await delay(300);
+  await line(`So ${monthName} ${anchorDate} is a ${DAYS[dd]} too.`);
   await line(`Last one: hop from there to ${monthName} ${day}. What weekday do you land on?`);
   const q3 = document.createElement('div'); body.appendChild(q3);
   const r3 = await askQuestion(q3, correctIdx, dd);
